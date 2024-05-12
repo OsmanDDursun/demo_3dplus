@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace App.OsmBuildingGenerator.Utils
 {
-    public class RealWorldTerrainTriangulator
+    public static class RealWorldTerrainTriangulator
     {
         private static void AddHole(List<Vector3> input, List<Vector3> hole)
         {

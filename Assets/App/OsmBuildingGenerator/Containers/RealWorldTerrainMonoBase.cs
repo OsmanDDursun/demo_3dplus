@@ -122,10 +122,7 @@ namespace App.OsmBuildingGenerator.Containers
         /// Height. Top latitude - bottom latitude 
         /// </summary>
         public double height;
-
-#if BUILDR2
-        public List<RealWorldTerrainBuildR2Material> buildR2Facades;
-#endif
+        
 
         private Dictionary<string, object> customFields;
         public double mercatorWidth;

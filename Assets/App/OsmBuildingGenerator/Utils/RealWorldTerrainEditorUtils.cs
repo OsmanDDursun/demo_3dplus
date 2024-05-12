@@ -8,13 +8,7 @@ namespace App.OsmBuildingGenerator.Utils
 {
     public static class RealWorldTerrainEditorUtils
     {
-        private static string _assetPath;
-        private static string _cacheFolder;
-        private static string _heightmapCacheFolder;
-        private static string _historyCacheFolder;
-        private static string _osmCacheFolder;
-        private static string _textureCacheFolder;
-        private static RealWorldTerrainItem lastC2WItem;
+        private static RealWorldTerrainItem _lastC2WItem;
 
         public static Vector3 CoordsToWorld(double mx, float y, double mz, RealWorldTerrainContainer globalContainer)
         {
@@ -50,22 +44,22 @@ namespace App.OsmBuildingGenerator.Utils
 
             Vector3 v = CoordsToWorld(mx, AppData.NodataValue, my, globalContainer) - offset;
 
-            if (lastC2WItem == null || !lastC2WItem.Contains(longitude, latitude))
+            if (_lastC2WItem == null || !_lastC2WItem.Contains(longitude, latitude))
             {
-                lastC2WItem = null;
+                _lastC2WItem = null;
                 for (int i = 0; i < globalContainer.terrains.Length; i++)
                 {
                     if (globalContainer.terrains[i].Contains(longitude, latitude))
                     {
-                        lastC2WItem = globalContainer.terrains[i];
+                        _lastC2WItem = globalContainer.terrains[i];
                         break;
                     }
                 }
             }
 
-            if (lastC2WItem != null)
+            if (_lastC2WItem != null)
             {
-                v.y = lastC2WItem.GetHeightmapValueByMercator(mx, my) + lastC2WItem.transform.position.y;
+                v.y = _lastC2WItem.GetHeightmapValueByMercator(mx, my) + _lastC2WItem.transform.position.y;
                 success = true;
             }
 

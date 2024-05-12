@@ -146,23 +146,26 @@ namespace App.OsmBuildingGenerator.Utils
 
         public static void InitOSMServer()
         {
-            RealWorldTerrainOSMOverpassServer osmServer = AppData.OsmServer;
-            if (osmServer == RealWorldTerrainOSMOverpassServer.main) osmURL = "https://overpass-api.de/api/interpreter?data=";
-            else if (osmServer == RealWorldTerrainOSMOverpassServer.main2) osmURL = "https://z.overpass-api.de/api/interpreter?data=";
-            else if (osmServer == RealWorldTerrainOSMOverpassServer.french) osmURL = "https://overpass.openstreetmap.fr/api/interpreter?data=";
-            else if (osmServer == RealWorldTerrainOSMOverpassServer.taiwan) osmURL = "https://overpass.nchc.org.tw/api/interpreter?data=";
-            else if (osmServer == RealWorldTerrainOSMOverpassServer.kumiSystems) osmURL = "https://overpass.kumi.systems/api/interpreter?data=";
+            osmURL = AppData.OsmServer switch
+            {
+                RealWorldTerrainOSMOverpassServer.main => "https://overpass-api.de/api/interpreter?data=",
+                RealWorldTerrainOSMOverpassServer.main2 => "https://z.overpass-api.de/api/interpreter?data=",
+                RealWorldTerrainOSMOverpassServer.french => "https://overpass.openstreetmap.fr/api/interpreter?data=",
+                RealWorldTerrainOSMOverpassServer.taiwan => "https://overpass.nchc.org.tw/api/interpreter?data=",
+                RealWorldTerrainOSMOverpassServer.kumiSystems => "https://overpass.kumi.systems/api/interpreter?data=",
+                _ => osmURL
+            };
         }
 
-        public static void LoadOSM(string _filename, out Dictionary<string, RealWorldTerrainOSMNode> _nodes, out Dictionary<string, RealWorldTerrainOSMWay> _ways, out List<RealWorldTerrainOSMRelation> _relations, bool moveRelationsToWays = true)
+        public static void LoadOSM(string filename, out Dictionary<string, RealWorldTerrainOSMNode> _nodes, out Dictionary<string, RealWorldTerrainOSMWay> _ways, out List<RealWorldTerrainOSMRelation> _relations, bool moveRelationsToWays = true)
         {
             _nodes = new Dictionary<string, RealWorldTerrainOSMNode>();
             _relations = new List<RealWorldTerrainOSMRelation>();
             _ways = new Dictionary<string, RealWorldTerrainOSMWay>();
 
-            if (!File.Exists(_filename)) return;
+            if (!File.Exists(filename)) return;
 
-            FileStream fs = File.OpenRead(_filename);
+            FileStream fs = File.OpenRead(filename);
             BinaryReader br = new BinaryReader(fs);
 
             int nodesCount = br.ReadInt32();
