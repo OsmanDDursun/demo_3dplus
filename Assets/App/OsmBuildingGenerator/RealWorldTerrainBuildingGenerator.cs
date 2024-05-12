@@ -35,7 +35,7 @@ namespace App.OsmBuildingGenerator
             get
             {
                 string format = string.Format(RealWorldTerrainCultureInfo.numberFormat, "(way['building']({0},{1},{2},{3});relation['building']({0},{1},{2},{3}););out;>;out skel qt;", AppData.BottomLatitude, AppData.LeftLongitude, AppData.TopLatitude, AppData.RightLongitude);
-                return RealWorldTerrainOSMUtils.osmURL + RealWorldTerrainDownloadManager.EscapeURL(format);
+                return RealWorldTerrainOSMUtils.OsmURL + RealWorldTerrainDownloadManager.EscapeURL(format);
             }
         }
 

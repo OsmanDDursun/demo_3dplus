@@ -20,10 +20,7 @@ namespace App.OsmBuildingGenerator.Net
             this.url = url;
         }
 
-        public override float progress
-        {
-            get { return _progress; }
-        }
+        public override float progress => _progress;
 
         public override void CheckComplete()
         {

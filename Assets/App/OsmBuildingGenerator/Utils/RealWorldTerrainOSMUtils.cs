@@ -14,20 +14,18 @@ namespace App.OsmBuildingGenerator.Utils
 {
     public static class RealWorldTerrainOSMUtils
     {
-        public static object _OSMLocker;
+        public static object OsmLocker;
 
         public static object OSMLocker
         {
             get
             {
-                if (_OSMLocker == null) _OSMLocker = new object();
-                return _OSMLocker;
+                if (OsmLocker == null) OsmLocker = new object();
+                return OsmLocker;
             }
         }
 
-        public static string osmURL = "https://overpass-api.de/api/interpreter?data=";
-
-        public static string[] projectMaterials;
+        public static string OsmURL = "https://overpass-api.de/api/interpreter?data=";
 
         public static MeshFilter AppendMesh(GameObject gameObject, Mesh mesh, Material material, string assetName)
         {
@@ -72,7 +70,7 @@ namespace App.OsmBuildingGenerator.Utils
             GC.Collect();
         }
 
-        public static List<Vector3> GetGlobalPointsFromWay(RealWorldTerrainOSMWay way, Dictionary<string, RealWorldTerrainOSMNode> _nodes)
+        public static List<Vector3> GetGlobalPointsFromWay(RealWorldTerrainOSMWay way, Dictionary<string, RealWorldTerrainOSMNode> nodes)
         {
             List<Vector3> points = new List<Vector3>();
             if (way.nodeRefs.Count == 0) return points;
@@ -80,12 +78,12 @@ namespace App.OsmBuildingGenerator.Utils
             foreach (string nodeRef in way.nodeRefs)
             {
                 RealWorldTerrainOSMNode node;
-                if (_nodes.TryGetValue(nodeRef, out node)) points.Add(new Vector3(node.lng, 0, node.lat));
+                if (nodes.TryGetValue(nodeRef, out node)) points.Add(new Vector3(node.lng, 0, node.lat));
             }
             return points;
         }
 
-        public static List<Vector3> GetGlobalPointsFromWay(RealWorldTerrainOSMWay way, Dictionary<string, RealWorldTerrainOSMNode> _nodes, out float minLng, out float minLat, out float maxLng, out float maxLat)
+        public static List<Vector3> GetGlobalPointsFromWay(RealWorldTerrainOSMWay way, Dictionary<string, RealWorldTerrainOSMNode> nodes, out float minLng, out float minLat, out float maxLng, out float maxLat)
         {
             minLng = minLat = float.MaxValue;
             maxLng = maxLat = float.MinValue;
@@ -95,7 +93,7 @@ namespace App.OsmBuildingGenerator.Utils
             foreach (string nodeRef in way.nodeRefs)
             {
                 RealWorldTerrainOSMNode node;
-                if (_nodes.TryGetValue(nodeRef, out node))
+                if (nodes.TryGetValue(nodeRef, out node))
                 {
                     if (minLng > node.lng) minLng = node.lng;
                     if (minLat > node.lat) minLat = node.lat;
@@ -131,7 +129,7 @@ namespace App.OsmBuildingGenerator.Utils
             return a - angle;
         }
 
-        public static List<Vector3> GetWorldPointsFromWay(RealWorldTerrainOSMWay way, Dictionary<string, RealWorldTerrainOSMNode> _nodes, RealWorldTerrainContainer container)
+        public static List<Vector3> GetWorldPointsFromWay(RealWorldTerrainOSMWay way, Dictionary<string, RealWorldTerrainOSMNode> nodes, RealWorldTerrainContainer container)
         {
             List<Vector3> points = new List<Vector3>();
             if (way.nodeRefs.Count == 0) return points;
@@ -139,29 +137,29 @@ namespace App.OsmBuildingGenerator.Utils
             foreach (string nodeRef in way.nodeRefs)
             {
                 RealWorldTerrainOSMNode node;
-                if (_nodes.TryGetValue(nodeRef, out node)) points.Add(RealWorldTerrainEditorUtils.CoordsToWorldWithElevation(new Vector3(node.lng, 0, node.lat), container));
+                if (nodes.TryGetValue(nodeRef, out node)) points.Add(RealWorldTerrainEditorUtils.CoordsToWorldWithElevation(new Vector3(node.lng, 0, node.lat), container));
             }
             return points;
         }
 
         public static void InitOSMServer()
         {
-            osmURL = AppData.OsmServer switch
+            OsmURL = AppData.OsmServer switch
             {
                 RealWorldTerrainOSMOverpassServer.main => "https://overpass-api.de/api/interpreter?data=",
                 RealWorldTerrainOSMOverpassServer.main2 => "https://z.overpass-api.de/api/interpreter?data=",
                 RealWorldTerrainOSMOverpassServer.french => "https://overpass.openstreetmap.fr/api/interpreter?data=",
                 RealWorldTerrainOSMOverpassServer.taiwan => "https://overpass.nchc.org.tw/api/interpreter?data=",
                 RealWorldTerrainOSMOverpassServer.kumiSystems => "https://overpass.kumi.systems/api/interpreter?data=",
-                _ => osmURL
+                _ => OsmURL
             };
         }
 
-        public static void LoadOSM(string filename, out Dictionary<string, RealWorldTerrainOSMNode> _nodes, out Dictionary<string, RealWorldTerrainOSMWay> _ways, out List<RealWorldTerrainOSMRelation> _relations, bool moveRelationsToWays = true)
+        public static void LoadOSM(string filename, out Dictionary<string, RealWorldTerrainOSMNode> nodes, out Dictionary<string, RealWorldTerrainOSMWay> ways, out List<RealWorldTerrainOSMRelation> relations, bool moveRelationsToWays = true)
         {
-            _nodes = new Dictionary<string, RealWorldTerrainOSMNode>();
-            _relations = new List<RealWorldTerrainOSMRelation>();
-            _ways = new Dictionary<string, RealWorldTerrainOSMWay>();
+            nodes = new Dictionary<string, RealWorldTerrainOSMNode>();
+            relations = new List<RealWorldTerrainOSMRelation>();
+            ways = new Dictionary<string, RealWorldTerrainOSMWay>();
 
             if (!File.Exists(filename)) return;
 
@@ -173,18 +171,18 @@ namespace App.OsmBuildingGenerator.Utils
             for (int i = 0; i < nodesCount; i++)
             {
                 RealWorldTerrainOSMNode node = new RealWorldTerrainOSMNode(br);
-                _nodes.Add(node.id, node);
+                nodes.Add(node.id, node);
             }
             int wayCount = br.ReadInt32();
             for (int i = 0; i < wayCount; i++)
             {
                 RealWorldTerrainOSMWay way = new RealWorldTerrainOSMWay(br);
-                if (!_ways.ContainsKey(way.id)) _ways.Add(way.id, way);
+                if (!ways.ContainsKey(way.id)) ways.Add(way.id, way);
             }
             int relationCount = br.ReadInt32();
-            for (int i = 0; i < relationCount; i++) _relations.Add(new RealWorldTerrainOSMRelation(br));
+            for (int i = 0; i < relationCount; i++) relations.Add(new RealWorldTerrainOSMRelation(br));
 
-            if (moveRelationsToWays) MoveRelationsToWays(_relations, _ways, _nodes);
+            if (moveRelationsToWays) MoveRelationsToWays(relations, ways, nodes);
         }
 
         private static void MoveRelationToWay(RealWorldTerrainOSMRelation relation, Dictionary<string, RealWorldTerrainOSMWay> ways, List<string> waysInRelation, Dictionary<string, RealWorldTerrainOSMNode> nodes)
@@ -271,30 +269,30 @@ namespace App.OsmBuildingGenerator.Utils
             }
         }
 
-        public static void SaveOSM(string _filename, Dictionary<string, RealWorldTerrainOSMNode> _nodes, Dictionary<string, RealWorldTerrainOSMWay> _ways, List<RealWorldTerrainOSMRelation> _relations)
+        public static void SaveOSM(string filename, Dictionary<string, RealWorldTerrainOSMNode> nodes, Dictionary<string, RealWorldTerrainOSMWay> ways, List<RealWorldTerrainOSMRelation> relations)
         {
-            FileStream fs = File.OpenWrite(_filename);
-            BinaryWriter bw = new BinaryWriter(fs);
+            var fs = File.OpenWrite(filename);
+            var bw = new BinaryWriter(fs);
 
-            if (_nodes != null)
+            if (nodes != null)
             {
-                bw.Write(_nodes.Count);
-                foreach (KeyValuePair<string, RealWorldTerrainOSMNode> pair in _nodes) pair.Value.Write(bw);
+                bw.Write(nodes.Count);
+                foreach (KeyValuePair<string, RealWorldTerrainOSMNode> pair in nodes) pair.Value.Write(bw);
             }
             else bw.Write(0);
 
-            if (_ways != null)
+            if (ways != null)
             {
-                bw.Write(_ways.Count);
-                foreach (KeyValuePair<string, RealWorldTerrainOSMWay> pair in _ways) pair.Value.Write(bw);
+                bw.Write(ways.Count);
+                foreach (KeyValuePair<string, RealWorldTerrainOSMWay> pair in ways) pair.Value.Write(bw);
             }
             else bw.Write(0);
 
-            if (_relations != null)
+            if (relations != null)
             {
-                _relations = new List<RealWorldTerrainOSMRelation>(_relations.Distinct());
-                bw.Write(_relations.Count);
-                foreach (RealWorldTerrainOSMRelation relation in _relations) relation.Write(bw);
+                relations = new List<RealWorldTerrainOSMRelation>(relations.Distinct());
+                bw.Write(relations.Count);
+                foreach (RealWorldTerrainOSMRelation relation in relations) relation.Write(bw);
             }
             else bw.Write(0);
 
