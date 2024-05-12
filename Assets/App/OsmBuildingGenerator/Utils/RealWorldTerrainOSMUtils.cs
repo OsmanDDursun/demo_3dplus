@@ -146,7 +146,7 @@ namespace App.OsmBuildingGenerator.Utils
 
         public static void InitOSMServer()
         {
-            RealWorldTerrainOSMOverpassServer osmServer = AppData.osmServer;
+            RealWorldTerrainOSMOverpassServer osmServer = AppData.OsmServer;
             if (osmServer == RealWorldTerrainOSMOverpassServer.main) osmURL = "https://overpass-api.de/api/interpreter?data=";
             else if (osmServer == RealWorldTerrainOSMOverpassServer.main2) osmURL = "https://z.overpass-api.de/api/interpreter?data=";
             else if (osmServer == RealWorldTerrainOSMOverpassServer.french) osmURL = "https://overpass.openstreetmap.fr/api/interpreter?data=";

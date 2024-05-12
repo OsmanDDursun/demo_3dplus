@@ -103,7 +103,7 @@ namespace App.OsmBuildingGenerator.Containers
             double x = cb.size.x * lX + cb.min.x;
             double z = cb.size.z * lZ + cb.min.z;
 
-            if (AppData.resultType == RealWorldTerrainResultType.terrain)
+            if (AppData.ResultType == RealWorldTerrainResultType.terrain)
             {
                 Terrain terrain = null;
                 for (int i = 0; i < terrains.Length; i++)
@@ -127,7 +127,7 @@ namespace App.OsmBuildingGenerator.Containers
                 worldPosition.y = (float)y;
                 worldPosition.z = (float)z;
             }
-            else if (AppData.resultType == RealWorldTerrainResultType.mesh)
+            else if (AppData.ResultType == RealWorldTerrainResultType.mesh)
             {
                 bool success = false;
                 for (int i = 0; i < terrains.Length; i++)

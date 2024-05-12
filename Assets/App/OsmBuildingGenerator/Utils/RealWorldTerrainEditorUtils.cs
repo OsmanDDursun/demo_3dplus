@@ -48,7 +48,7 @@ namespace App.OsmBuildingGenerator.Utils
             //     if (success) return CoordsToWorld(mx, (float) (elevation - globalContainer.minElevation), my, globalContainer) - offset;
             // }
 
-            Vector3 v = CoordsToWorld(mx, AppData.nodataValue, my, globalContainer) - offset;
+            Vector3 v = CoordsToWorld(mx, AppData.NodataValue, my, globalContainer) - offset;
 
             if (lastC2WItem == null || !lastC2WItem.Contains(longitude, latitude))
             {

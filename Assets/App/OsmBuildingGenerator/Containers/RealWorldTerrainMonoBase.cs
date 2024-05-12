@@ -190,7 +190,7 @@ namespace App.OsmBuildingGenerator.Containers
             Bounds b = new Bounds(bounds.center + transform.position, bounds.size);
             Vector3 offset = worldPosition - b.min;
 
-            if (AppData.resultType == RealWorldTerrainResultType.terrain)
+            if (AppData.ResultType == RealWorldTerrainResultType.terrain)
             {
                 RealWorldTerrainItem currentItem = GetItemByWorldPosition(worldPosition);
                 return offset.y / currentItem.terrainData.size.y * (currentItem.maxElevation - currentItem.minElevation);
@@ -224,7 +224,7 @@ namespace App.OsmBuildingGenerator.Containers
             if (offset.x < 0 || offset.z < 0) return 0;
             if (offset.x > b.size.x || offset.z > b.size.z) return 0;
 
-            if (AppData.resultType == RealWorldTerrainResultType.terrain)
+            if (AppData.ResultType == RealWorldTerrainResultType.terrain)
             {
                 RealWorldTerrainItem currentItem = GetItemByWorldPosition(worldPosition);
                 return offset.y / currentItem.terrainData.size.y * (currentItem.maxElevation - currentItem.minElevation);
@@ -364,7 +364,7 @@ namespace App.OsmBuildingGenerator.Containers
 
             Vector3 offset = worldPosition - b.min;
 
-            if (AppData.resultType == RealWorldTerrainResultType.terrain)
+            if (AppData.ResultType == RealWorldTerrainResultType.terrain)
             {
                 RealWorldTerrainItem currentItem = GetItemByWorldPosition(worldPosition);
                 altitude = (offset.y + currentItem.transform.position.y) / currentItem.terrainData.size.y * (currentItem.maxElevation - currentItem.minElevation) + currentItem.minElevation;

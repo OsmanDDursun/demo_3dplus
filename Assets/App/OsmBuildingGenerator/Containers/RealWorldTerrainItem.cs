@@ -57,7 +57,7 @@ namespace App.OsmBuildingGenerator.Containers
         {
             get
             {
-                if (AppData.resultType == RealWorldTerrainResultType.terrain)
+                if (AppData.ResultType == RealWorldTerrainResultType.terrain)
                 {
 #if !RTP
 
@@ -86,7 +86,7 @@ namespace App.OsmBuildingGenerator.Containers
             }
             set
             {
-                if (AppData.resultType == RealWorldTerrainResultType.terrain)
+                if (AppData.ResultType == RealWorldTerrainResultType.terrain)
                 {
 #if !RTP
                     if (terrainData == null) return;
@@ -173,7 +173,7 @@ namespace App.OsmBuildingGenerator.Containers
             double px = b.size.x * lX + b.min.x;
             double pz = b.size.z * lZ + b.min.z;
 
-            if (AppData.resultType == RealWorldTerrainResultType.terrain)
+            if (AppData.ResultType == RealWorldTerrainResultType.terrain)
             {
                 Terrain tr = terrain;
                 if (tr == null) return false;

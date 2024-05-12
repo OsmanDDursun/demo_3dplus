@@ -1,0 +1,422 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5213210787225748343
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6246827984941398858}
+  - component: {fileID: 568330424487915250}
+  m_Layer: 0
+  m_Name: RealWorld Terrain
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6246827984941398858
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5213210787225748343}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8669951195357096683}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &568330424487915250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5213210787225748343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35746522d0c34a74e98f963412f0defe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bounds:
+    m_Center: {x: 2077, y: 583, z: 2025}
+    m_Extent: {x: 2077, y: 583, z: 2025}
+  generateGrass: 0
+  generatedRivers: 0
+  generateRoads: 0
+  generateTextures: 1
+  generateTrees: 0
+  generatedBuildings: 0
+  generatedGrass: 0
+  generatedTextures: 0
+  generatedTrees: 0
+  maxElevation: 1066.2017665165795
+  minElevation: -100
+  prefs:
+    buildingBasementDepth: 0
+    buildingBottomMode: 0
+    buildingFloorHeight: 3.5
+    buildingFloorLimits:
+      min: 5
+      minLimit: 1
+      max: 7
+      maxLimit: 50
+    buildingGenerator: 0
+    buildingMaterials: []
+    buildingPrefabs: []
+    buildingSaveInResult: 1
+    buildingSingleRequest: 1
+    buildingUseColorTags: 0
+    buildRCollider: 0
+    buildR3Collider: 0
+    buildRRenderMode: 3
+    customBuildRGeneratorStyle: 0
+    customBuildRGeneratorTexturePack: 0
+    customBuildRPresets: []
+    dynamicBuildings: 1
+    POI: []
+    riverEngine: Built-In
+    riverMaterial: {fileID: 0}
+    title: 
+    grassDensity: 100
+    grassEngine: 
+    grassPrefabs: []
+    vegetationStudioGrassTypes: 
+    volumeGrassOutsidePoints: 0
+    erRoadTypes: []
+    erGenerateConnection: 1
+    erSnapToTerrain: 1
+    erWidthMultiplier: 1
+    normalizeRoadDistances: 1
+    roadEngine: 
+    roadTypes: -1
+    roadTypeMode: 0
+    splineBendMaterial: {fileID: 0}
+    splineBendMesh: {fileID: 0}
+    alignWaterLine: 0
+    autoDetectElevationOffset: {x: 100, y: 100}
+    baseMapResolution: 1024
+    bingMapsUseZeroAsUnknown: 0
+    controlTextureResolution: 512
+    depthSharpness: 0
+    detailResolution: 2048
+    elevationProvider: 0
+    elevationRange: 0
+    elevationType: 0
+    fixedTerrainSize: {x: 500, y: 600, z: 500}
+    gaiaStampResolution: 1024
+    generateUnderWater: 0
+    heightmapResolution: 129
+    ignoreSRTMErrors: 0
+    fixedMaxElevation: 1000
+    fixedMinElevation: 0
+    maxElevationType: 0
+    nodataValue: 0
+    rawByteOrder: 0
+    rawFilename: terrain
+    rawHeight: 1024
+    rawWidth: 1024
+    rawType: 0
+    resolutionPerPatch: 16
+    resultType: 0
+    sizeType: 0
+    terrainScale: {x: 1, y: 1, z: 1}
+    waterDetectionTexture: {fileID: 0}
+    hugeTexturePageSize: 2048
+    hugeTextureRows: 13
+    hugeTextureCols: 13
+    mapTypeID: osm.mapnik
+    mapTypeExtraFields: 
+    maxTextureLevel: 0
+    reduceTextures: 1
+    textureCount:
+      x: 1
+      y: 1
+    textureFileType: 1
+    textureFileQuality: 100
+    textureProvider: 4
+    textureProviderURL: http://localhost/tiles/{zoom}/{x}/{y}
+    textureSize:
+      x: 8192
+      y: 8192
+    textureMipMaps: 0
+    textureResultType: 0
+    textureType: 0
+    vectorTerrainBaseLayers: []
+    vectorTerrainBaseLayersNoiseOffset: {x: 0, y: 0}
+    vectorTerrainBaseLayersNoiseScale: 16
+    vectorTerrainLayers: []
+    treeDensity: 100
+    treeEngine: 
+    treePrefabs: []
+    vegetationStudioTreeTypes: 
+  scale: {x: 85207.055, y: 0.99982697, z: 111205.95}
+  size: {x: 4154, y: 1166, z: 4050}
+  topLatitude: 39.989200592041
+  topMercator: 0.37861831471676366
+  leftLongitude: 32.7306747436523
+  leftMercator: 0.5909185409545897
+  bottomLatitude: 39.9527816772461
+  bottomMercator: 0.378750318428069
+  rightLongitude: 32.779426574707
+  rightMercator: 0.5910539627075194
+  width: 0.04875183105470171
+  height: -0.03641891479490056
+  mercatorWidth: 0.0001354217529296875
+  mercatorHeight: 0.0001320037113053396
+  billboardStart: 50
+  detailDensity: 1
+  detailDistance: 80
+  folder: Assets/RWT_Result/2024-05-12 20-14
+  terrainCount:
+    x: 1
+    y: 1
+  title: 
+  treeDistance: 2000
+  terrains:
+  - {fileID: 2031026837961641063}
+--- !u!1 &6147301078766568650
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8669951195357096683}
+  - component: {fileID: 7679669563471779019}
+  - component: {fileID: 8498137153973121555}
+  - component: {fileID: 2031026837961641063}
+  m_Layer: 0
+  m_Name: Terrain 0x0
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483646
+  m_IsActive: 1
+--- !u!4 &8669951195357096683
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6147301078766568650}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6246827984941398858}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!218 &7679669563471779019
+Terrain:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6147301078766568650}
+  m_Enabled: 1
+  serializedVersion: 6
+  m_TerrainData: {fileID: 15600000, guid: c2a7883b38754f14db04a7029da5584b, type: 2}
+  m_TreeDistance: 2000
+  m_TreeBillboardDistance: 50
+  m_TreeCrossFadeLength: 5
+  m_TreeMaximumFullLODCount: 50
+  m_DetailObjectDistance: 80
+  m_DetailObjectDensity: 1
+  m_HeightmapPixelError: 5
+  m_SplatMapDistance: 1000
+  m_HeightmapMaximumLOD: 0
+  m_ShadowCastingMode: 2
+  m_DrawHeightmap: 1
+  m_DrawInstanced: 0
+  m_DrawTreesAndFoliage: 1
+  m_StaticShadowCaster: 0
+  m_IgnoreQualitySettings: 0
+  m_ReflectionProbeUsage: 1
+  m_MaterialTemplate: {fileID: 10652, guid: 0000000000000000f000000000000000, type: 0}
+  m_BakeLightProbesForTrees: 1
+  m_PreserveTreePrototypeLayers: 0
+  m_DeringLightProbesForTrees: 1
+  m_ReceiveGI: 1
+  m_ScaleInLightmap: 0.0062413597
+  m_LightmapParameters: {fileID: 15203, guid: 0000000000000000f000000000000000, type: 0}
+  m_GroupingID: 0
+  m_RenderingLayerMask: 1
+  m_AllowAutoConnect: 1
+  m_EnableHeightmapRayTracing: 1
+  m_EnableTreesAndDetailsRayTracing: 0
+  m_TreeMotionVectorModeOverride: 3
+--- !u!154 &8498137153973121555
+TerrainCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6147301078766568650}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_TerrainData: {fileID: 15600000, guid: c2a7883b38754f14db04a7029da5584b, type: 2}
+  m_EnableTreeColliders: 1
+--- !u!114 &2031026837961641063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6147301078766568650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc9fccbe3f9587140a1e1601f0e73d70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bounds:
+    m_Center: {x: 2077, y: 583, z: 2025}
+    m_Extent: {x: 2077, y: 583, z: 2025}
+  generateGrass: 0
+  generatedRivers: 0
+  generateRoads: 0
+  generateTextures: 1
+  generateTrees: 0
+  generatedBuildings: 0
+  generatedGrass: 0
+  generatedTextures: 1
+  generatedTrees: 0
+  maxElevation: 1066.2017665165795
+  minElevation: -100
+  prefs:
+    buildingBasementDepth: 0
+    buildingBottomMode: 0
+    buildingFloorHeight: 3.5
+    buildingFloorLimits:
+      min: 5
+      minLimit: 1
+      max: 7
+      maxLimit: 50
+    buildingGenerator: 0
+    buildingMaterials: []
+    buildingPrefabs: []
+    buildingSaveInResult: 1
+    buildingSingleRequest: 1
+    buildingUseColorTags: 0
+    buildRCollider: 0
+    buildR3Collider: 0
+    buildRRenderMode: 3
+    customBuildRGeneratorStyle: 0
+    customBuildRGeneratorTexturePack: 0
+    customBuildRPresets: []
+    dynamicBuildings: 1
+    POI: []
+    riverEngine: Built-In
+    riverMaterial: {fileID: 0}
+    title: 
+    grassDensity: 100
+    grassEngine: 
+    grassPrefabs: []
+    vegetationStudioGrassTypes: 
+    volumeGrassOutsidePoints: 0
+    erRoadTypes: []
+    erGenerateConnection: 1
+    erSnapToTerrain: 1
+    erWidthMultiplier: 1
+    normalizeRoadDistances: 1
+    roadEngine: 
+    roadTypes: -1
+    roadTypeMode: 0
+    splineBendMaterial: {fileID: 0}
+    splineBendMesh: {fileID: 0}
+    alignWaterLine: 0
+    autoDetectElevationOffset: {x: 100, y: 100}
+    baseMapResolution: 1024
+    bingMapsUseZeroAsUnknown: 0
+    controlTextureResolution: 512
+    depthSharpness: 0
+    detailResolution: 2048
+    elevationProvider: 0
+    elevationRange: 0
+    elevationType: 0
+    fixedTerrainSize: {x: 500, y: 600, z: 500}
+    gaiaStampResolution: 1024
+    generateUnderWater: 0
+    heightmapResolution: 129
+    ignoreSRTMErrors: 0
+    fixedMaxElevation: 1000
+    fixedMinElevation: 0
+    maxElevationType: 0
+    nodataValue: 0
+    rawByteOrder: 0
+    rawFilename: terrain
+    rawHeight: 1024
+    rawWidth: 1024
+    rawType: 0
+    resolutionPerPatch: 16
+    resultType: 0
+    sizeType: 0
+    terrainScale: {x: 1, y: 1, z: 1}
+    waterDetectionTexture: {fileID: 0}
+    hugeTexturePageSize: 2048
+    hugeTextureRows: 13
+    hugeTextureCols: 13
+    mapTypeID: osm.mapnik
+    mapTypeExtraFields: 
+    maxTextureLevel: 0
+    reduceTextures: 1
+    textureCount:
+      x: 1
+      y: 1
+    textureFileType: 1
+    textureFileQuality: 100
+    textureProvider: 4
+    textureProviderURL: http://localhost/tiles/{zoom}/{x}/{y}
+    textureSize:
+      x: 8192
+      y: 8192
+    textureMipMaps: 0
+    textureResultType: 0
+    textureType: 0
+    vectorTerrainBaseLayers: []
+    vectorTerrainBaseLayersNoiseOffset: {x: 0, y: 0}
+    vectorTerrainBaseLayersNoiseScale: 16
+    vectorTerrainLayers: []
+    treeDensity: 100
+    treeEngine: 
+    treePrefabs: []
+    vegetationStudioTreeTypes: 
+  scale: {x: 85207.055, y: 0.99982697, z: 111205.95}
+  size: {x: 4154, y: 1166, z: 4050}
+  topLatitude: 39.98920007828694
+  topMercator: 0.37861831471676366
+  leftLongitude: 32.730675414204555
+  leftMercator: 0.5909185409545897
+  bottomLatitude: 39.95278116321823
+  bottomMercator: 0.378750318428069
+  rightLongitude: 32.77942724525924
+  rightMercator: 0.5910539627075194
+  width: 0.0487518310546875
+  height: -0.0364189150687082
+  mercatorWidth: 0.0001354217529296875
+  mercatorHeight: 0.0001320037113053396
+  container: {fileID: 568330424487915250}
+  x: 0
+  y: 0
+  ry: 0
+  needUpdate: 0
+  meshFilter: {fileID: 0}
+  terrain: {fileID: 7679669563471779019}

@@ -31,7 +31,7 @@ namespace App.Scripts.Managers
                 Directory.CreateDirectory(AppData.GetSaveFolder());
             }
             
-            AppData.buildingMaterials = new List<RealWorldTerrainBuildingMaterial>()
+            AppData.BuildingMaterials = new List<RealWorldTerrainBuildingMaterial>()
             {
                 new()
                 {

@@ -168,7 +168,7 @@ namespace App.OsmBuildingGenerator.Containers
             Vector3[] targetVertices = new Vector3[baseVertices.Length];
             Array.Copy(baseVertices, targetVertices, baseVertices.Length);
 
-            if (AppData.buildingBottomMode == RealWorldTerrainBuildingBottomMode.followTerrain)
+            if (AppData.BuildingBottomMode == RealWorldTerrainBuildingBottomMode.followTerrain)
             {
                 Vector3 tp = transform.position;
                 RealWorldTerrainItem terrainItem = container.GetItemByWorldPosition(baseVertices[0] + tp);
@@ -249,7 +249,7 @@ namespace App.OsmBuildingGenerator.Containers
             Vector3[] targetVertices = new Vector3[baseVertices.Length];
             Array.Copy(baseVertices, targetVertices, baseVertices.Length);
 
-            if (AppData.buildingBottomMode == RealWorldTerrainBuildingBottomMode.followTerrain)
+            if (AppData.BuildingBottomMode == RealWorldTerrainBuildingBottomMode.followTerrain)
             {
                 Vector3 tp = transform.position;
                 RealWorldTerrainItem terrainItem = container.GetItemByWorldPosition(baseVertices[0] + tp);
