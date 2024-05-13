@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using App.OsmBuildingGenerator.Utils;
+using HighlightPlus;
 
 namespace App.OsmBuildingGenerator
 {
@@ -24,7 +25,8 @@ namespace App.OsmBuildingGenerator
         public static readonly RealWorldTerrainRangeI BuildingFloorLimits = new RealWorldTerrainRangeI(5, 7, 1, 50);
         public const float NodataValue = 0;
         public static bool IsCapturing = true;
-        
+        public static HighlightProfile HighlightProfile { get; set; }
+
         public static string GetSaveFolder()
         {
             var documentPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments).Replace("\\", "/");

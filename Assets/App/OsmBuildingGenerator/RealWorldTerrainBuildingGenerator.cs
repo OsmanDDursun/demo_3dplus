@@ -10,6 +10,7 @@ using App.OsmBuildingGenerator.Containers;
 using App.OsmBuildingGenerator.Net;
 using App.OsmBuildingGenerator.OSM;
 using App.OsmBuildingGenerator.Utils;
+using App.Scripts.CommonModels;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
@@ -18,6 +19,8 @@ namespace App.OsmBuildingGenerator
 {
     public static class RealWorldTerrainBuildingGenerator
     {
+        public static event Action<BuildingId, BuildingHook> BuildingCreated;
+        
         private const int multiRequestZoom = 12;
 
         public static Func<List<Vector3>, RealWorldTerrainOSMWay, Dictionary<string, RealWorldTerrainOSMNode>, bool> OnGenerateBuilding;
@@ -277,7 +280,7 @@ namespace App.OsmBuildingGenerator
             }
         }
 
-        private static void CreateHouse(RealWorldTerrainOSMWay way, RealWorldTerrainContainer globalContainer)
+        private static void CreateHouse(RealWorldTerrainOSMWay way, RealWorldTerrainContainer globalContainer, int index)
         {
             float minLng, minLat, maxLng, maxLat;
             List<Vector3> points = RealWorldTerrainOSMUtils.GetGlobalPointsFromWay(way, nodes, out minLng, out minLat, out maxLng, out maxLat);
@@ -385,10 +388,7 @@ namespace App.OsmBuildingGenerator
             house.generateWall = true;
             house.wallMaterial = wallMaterial;
             house.roofMaterial = roofMaterial;
-            if (buildingMaterial != null)
-            {
-                house.tileSize = buildingMaterial.tileSize;
-            }
+            house.tileSize = buildingMaterial.tileSize;
             house.id = way.id;
 
             if (way.HasTagKey("building"))
@@ -399,6 +399,11 @@ namespace App.OsmBuildingGenerator
 
             house.Generate();
             houseGO.AddComponent<RealWorldTerrainOSMMeta>().GetFromOSM(way);
+
+            var hook = houseGO.AddComponent<BuildingHook>();
+            var buildingId = BuildingId.Parse(way.id);
+            hook.Initialize(index, buildingId);
+            BuildingCreated?.Invoke(buildingId, hook);
         }
 
         public static void Dispose()
@@ -495,7 +500,7 @@ namespace App.OsmBuildingGenerator
                     if (int.TryParse(layer, out l) && l < 0) continue;
                 }
 
-                CreateHouse(way, globalContainer);
+                CreateHouse(way, globalContainer, index);
             }
         }
 

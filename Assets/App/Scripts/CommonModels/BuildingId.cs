@@ -15,6 +15,15 @@ namespace App.Scripts.CommonModels
         
         public static BuildingId Invalid = new BuildingId(0);
         
+        public static BuildingId Parse(string value)
+        {
+            if (ulong.TryParse(value, out ulong result))
+            {
+                return new BuildingId(result);
+            }
+            return Invalid;
+        }
+        
         public static bool operator ==(BuildingId a, BuildingId b) => a.Value == b.Value;
         public static bool operator !=(BuildingId a, BuildingId b) => a.Value != b.Value;
 
