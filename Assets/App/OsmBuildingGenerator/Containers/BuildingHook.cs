@@ -18,6 +18,7 @@ namespace App.OsmBuildingGenerator.Containers
         private MaterialPropertyBlock _propertyBlock;
         private Material _outlineMaterial;
         private HighlightEffect _highlightEffect;
+        private MeshFilter _meshFilter;
         
         #region Init&Dispose
 
@@ -26,6 +27,7 @@ namespace App.OsmBuildingGenerator.Containers
             gameObject.AddComponent<MeshCollider>();
             Index = index;
             BuildingId = id;
+            _meshFilter = GetComponent<MeshFilter>();
             _propertyBlock = new MaterialPropertyBlock();
             _meshRenderer = GetComponent<MeshRenderer>();
             _dynamicBuilding = GetComponent<RealWorldTerrainDynamicBuilding>();
@@ -55,7 +57,7 @@ namespace App.OsmBuildingGenerator.Containers
         public void ToggleHighlight(bool toggle)
         {
             _highlightEffect.highlighted = true;
-            _highlightEffect.innerGlow = toggle ? 1 : 0;
+            _highlightEffect.overlay = toggle ? 1 : 0;
         }
         
         public void ToggleOutline(bool toggle)
@@ -97,5 +99,23 @@ namespace App.OsmBuildingGenerator.Containers
 
             return false;
         }
+
+        // private void OnDrawGizmos()
+        // {
+        //     Gizmos.color = Color.red;
+        //     var max = _meshRenderer.bounds.max;
+        //     var min = _meshRenderer.bounds.min;
+        //     
+        //     Gizmos.DrawWireSphere(max, 0.1f);
+        //     Gizmos.DrawWireSphere(min, 0.1f);
+        //     
+        //     Gizmos.DrawLine(max, min);
+        //     
+        //     foreach (var meshVertex in _meshFilter.mesh.vertices)
+        //     {
+        //         var worldVertex = transform.TransformPoint(meshVertex);
+        //         Gizmos.DrawSphere(worldVertex, 0.3f);
+        //     }
+        // }
     }
 }

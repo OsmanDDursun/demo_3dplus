@@ -1,4 +1,5 @@
 using App.OsmBuildingGenerator.Utils;
+using App.Scripts.Managers;
 using TMPro;
 using UnityEngine;
 
@@ -11,10 +12,9 @@ namespace App.Scripts.Ui
 
         public void UpdateView(Vector3 unityPosition)
         {
-            RealWorldTerrainUtils.MercatToLatLong(unityPosition.x, unityPosition.z, out var longitude, out var latitude);
-            
-            _latitudeText.text = latitude.ToString("F10");
-            _longitudeText.text = longitude.ToString("F10");
+            AppManager.Instance.MapManager.GetCoordinatesByWorldPosition(unityPosition, out var longitude, out var latitude, out var altitude);
+            _latitudeText.text = latitude.ToString("F7");
+            _longitudeText.text = longitude.ToString("F7");
         }
     }
 }

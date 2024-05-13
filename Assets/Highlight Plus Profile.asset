@@ -19,7 +19,7 @@ MonoBehaviour:
   effectNameFilter: 
   combineMeshes: 0
   alphaCutOff: 0
-  cullBackFaces: 1
+  cullBackFaces: 0
   normalsOption: 0
   fadeInDuration: 0
   fadeOutDuration: 0
@@ -29,7 +29,7 @@ MonoBehaviour:
   constantWidth: 1
   overlay: 0
   overlayMode: 0
-  overlayColor: {r: 0.16024329, g: 1, b: 0.015686274, a: 1}
+  overlayColor: {r: 1, g: 0.8392157, b: 0.015686275, a: 1}
   overlayAnimationSpeed: 1
   overlayMinIntensity: 0.5
   overlayBlending: 1
@@ -37,8 +37,8 @@ MonoBehaviour:
   overlayTextureUVSpace: 0
   overlayTextureScale: 1
   overlayTextureScrolling: {x: 0, y: 0}
-  overlayVisibility: 0
-  outline: 0.118
+  overlayVisibility: 1
+  outline: 0.076
   outlineColor: {r: 1, g: 0.405365, b: 0, a: 1}
   outlineColorStyle: 0
   outlineGradient:
@@ -73,7 +73,7 @@ MonoBehaviour:
     m_NumAlphaKeys: 2
   outlineGradientInLocalSpace: 0
   outlineBlurPasses: 2
-  outlineWidth: 0.4
+  outlineWidth: 0.2
   outlineQuality: 0
   outlineEdgeMode: 0
   outlineEdgeThreshold: 0.995

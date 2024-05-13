@@ -12,12 +12,13 @@ namespace App.Scripts.Managers
 {
     public class AppManager : SingletonBehaviour<AppManager>
     {
+        public event Action Initialized;
+        
         [SerializeField] private Material _roofMaterial;
         [SerializeField] private Material _wallMaterial;
         [SerializeField] private HighlightProfile _highlightProfile;
         
         [SerializeField] private RealWorldTerrainContainer _terrainContainer;
-        public event Action Initialized;
 
         public bool IsInitialized { get; private set; }
         public MapManager MapManager { get; private set; }

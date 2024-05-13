@@ -51,17 +51,25 @@ namespace App.Scripts.Managers
             _highlightedBuildingIds.Add(buildingId);
         }
         
-        public void HighlightBuildingsInIndexRange(int min, int max)
+        public int HighlightBuildingsForInfo(string info)
         {
+            var count = 0;
             foreach (var (buildingId, hook) in _buildingHooksByBuildingId)
             {
-                if (_highlightedBuildingIds.Contains(buildingId)) continue;
-                if (hook.Index >= min && hook.Index <= max)
+                
+                foreach (var metaTag in hook.GetMetaTags())
                 {
-                    hook.ToggleHighlight(true);
-                    _highlightedBuildingIds.Add(buildingId);
+                    var lowerInfo = info.ToLower();
+                    var lowerMetaInfo = metaTag.info.ToLower();
+                    if (lowerMetaInfo.Contains(lowerInfo))
+                    {
+                        count++;
+                        HighlightBuilding(buildingId);
+                    }
                 }
             }
+
+            return count;
         }
         
         public void DisableAllHighlights()
@@ -71,6 +79,8 @@ namespace App.Scripts.Managers
                 if (!_buildingHooksByBuildingId.TryGetValue(buildingId, out var buildingHook)) continue;
                 buildingHook.ToggleHighlight(false);
             }
+            
+            _highlightedBuildingIds.Clear();
         }
         
         public void AssignColorToBuilding(BuildingId buildingId, Color color)
@@ -114,6 +124,11 @@ namespace App.Scripts.Managers
         {
             if (!_buildingHooksByBuildingId.TryGetValue(buildingId, out var buildingHook)) return;
             buildingHook.SetHeight(value);
+        }
+
+        public bool GetCoordinatesByWorldPosition(Vector3 worldPosition, out double longitude, out double latitude, out double altitude)
+        {
+            return _terrainContainer.GetCoordinatesByWorldPosition(worldPosition, out longitude, out latitude, out altitude);
         }
 
         #region Events

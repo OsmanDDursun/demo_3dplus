@@ -8,6 +8,7 @@ namespace App.Scripts.Ui
     {
         [SerializeField] private InspectorPanel _inspectorPanel;
         [SerializeField] private CoordinateView _pointerCoordinateView;
+        [SerializeField] private SearchView _searchView;
 
         private LayerMask _terrainLayerMask;
         private Camera _camera;
@@ -22,11 +23,13 @@ namespace App.Scripts.Ui
             _camera = Camera.main;
             _terrainLayerMask = LayerMask.GetMask("Terrain");
             _inspectorPanel.Initialize();
+            _searchView.Initialize();
         }
 
         private void Dispose()
         {
             _inspectorPanel.Dispose();
+            _searchView.Dispose();
         }
 
         #endregion
