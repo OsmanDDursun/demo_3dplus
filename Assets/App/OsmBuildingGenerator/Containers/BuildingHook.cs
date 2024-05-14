@@ -21,6 +21,8 @@ namespace App.OsmBuildingGenerator.Containers
         private HighlightEffect _highlightEffect;
         private MeshFilter _meshFilter;
         private MeshCollider _meshCollider;
+        private List<Vector3> _surfaceVertices = new();
+        private List<Vector3> _extendedVertices = new();
         
         #region Init&Dispose
 
@@ -40,6 +42,125 @@ namespace App.OsmBuildingGenerator.Containers
         }
         
         #endregion
+
+        public Vector3[] GetVertices()
+        {
+            return _dynamicBuilding.baseVertices;
+        }
+        
+        public Vector3 GetFaceCenter(Vector3 position)
+        {
+            var vertices = _dynamicBuilding.baseVertices;
+            var center = Vector3.zero;
+            for (var i = 0; i < vertices.Length; i++)
+            {
+                center += vertices[i];
+            }
+
+            center /= vertices.Length;
+            return center;
+        }
+
+        public bool TryGetSurfaceVertices(Vector3 pointOnSurface, out List<Vector3> surfaceVertices, out Vector3 worldCenterPoint)
+        {
+            pointOnSurface = transform.InverseTransformPoint(pointOnSurface);
+            _surfaceVertices.Clear();
+            surfaceVertices = _surfaceVertices;
+            
+            var vertices = _meshFilter.mesh.vertices;
+            var triangles = _meshFilter.mesh.triangles;
+            float tolerance = 0.01f;
+
+            for (int i = 0; i < triangles.Length; i += 3)
+            {
+                var v0 = vertices[triangles[i]];
+                var v1 = vertices[triangles[i + 1]];
+                var v2 = vertices[triangles[i + 2]];
+
+                var triangleNormal = Vector3.Cross(v1 - v0, v2 - v0).normalized;
+                var v0ToPoint = pointOnSurface - v0;
+
+                if (Mathf.Abs(Vector3.Dot(triangleNormal, v0ToPoint)) < tolerance)
+                {
+                    if(!_surfaceVertices.Contains(v0))
+                        _surfaceVertices.Add(v0);
+                    if(!_surfaceVertices.Contains(v1))
+                        _surfaceVertices.Add(v1);
+                    if(!_surfaceVertices.Contains(v2))
+                        _surfaceVertices.Add(v2);
+                }
+            }
+            
+            worldCenterPoint = Vector3.zero;
+            foreach (var vertex in _surfaceVertices)
+            {
+                worldCenterPoint += vertex;
+            }
+            
+            if (_surfaceVertices.Count > 0)
+                worldCenterPoint /= _surfaceVertices.Count;
+            
+            worldCenterPoint = transform.TransformPoint(worldCenterPoint);
+            
+            return _surfaceVertices.Count > 0;
+        }
+        
+        public bool TryGetSurfaceData(Vector3 surfacePoint, out List<int> verticesIndexes, out Vector3 center)
+        {
+            verticesIndexes = new List<int>();
+            if (!TryGetSurfaceVertices(surfacePoint, out var vertices, out center))
+                return false;
+            
+            var verticesArray = _dynamicBuilding.baseVertices;
+
+            for (int i = 0; i < vertices.Count; i++)
+            {
+                var vertex = vertices[i];
+                
+                for (int j = 0; j < verticesArray.Length; j++)
+                {
+                    var baseVertex = verticesArray[j];
+                    var distance = Vector3.Distance(vertex, baseVertex);
+                    if (distance < 0.1f)
+                    {
+                        verticesIndexes.Add(j);
+                        break;
+                    }
+                }
+            }
+            
+            return true;
+        }
+        
+        public void ExtendInDirection(List<Vector3> vertices, Vector3 direction)
+        {
+            var localDirection = transform.InverseTransformDirection(direction);
+            _extendedVertices.Clear();
+            
+            var baseVertices = _dynamicBuilding.baseVertices;
+
+            for (int i = 0; i < vertices.Count; i++)
+            {
+                var vertex = vertices[i];
+                
+                for (int j = 0; j < baseVertices.Length; j++)
+                {
+                    var baseVertex = baseVertices[j];
+                    var distance = Vector3.Distance(vertex, baseVertex);
+                    if (distance < 0.1f)
+                    {
+                        baseVertices[j] += localDirection;
+                        _extendedVertices.Add(baseVertex + localDirection);
+                        break;
+                    }
+                }
+            }
+            
+            _dynamicBuilding.baseVertices = baseVertices;
+            _dynamicBuilding.Generate();
+            _highlightEffect.Refresh(true);
+            _meshCollider.sharedMesh = _meshFilter.mesh;
+        }
         
         public float GetHeight()
         {
@@ -104,39 +225,20 @@ namespace App.OsmBuildingGenerator.Containers
 
         private void OnDrawGizmos()
         {
-            Gizmos.color = Color.red;
-            Vector3[] vertices = _meshFilter.mesh.vertices;
-
-            // Bounds'u başlat
-            Bounds bounds = new Bounds(_dynamicBuilding.baseVertices[0], Vector3.zero);
-
-            // Tüm vertexleri dolaşarak bounds'u genişlet
-            foreach (Vector3 vertex in _dynamicBuilding.baseVertices)
+            // if (_surfaceVertices == null) return;
+            // foreach (var faceVertex in _surfaceVertices)
+            // {
+            //     var worldPosition = transform.TransformPoint(faceVertex);
+            //     Gizmos.color = Color.red;
+            //     Gizmos.DrawSphere(worldPosition, 1f);
+            // }            
+            
+            foreach (var faceVertex in _extendedVertices)
             {
-                bounds.Encapsulate(vertex);
+                var worldPosition = transform.TransformPoint(faceVertex);
+                Gizmos.color = Color.red;
+                Gizmos.DrawSphere(worldPosition, 1f);
             }
-            
-            var center = transform.TransformPoint(bounds.center);
-            var size = bounds.size;
-            var min = bounds.min;
-            var max = bounds.max;
-            
-            var xDir = (max - new Vector3(max.x, max.y, min.z)).normalized;
-            var yDir = Vector3.up;
-            var zDir = (max - new Vector3(min.x, max.y, max.z)).normalized;
-            
-            //draw directions
-            
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(center, center + xDir * 10);
-            
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(center, center + yDir * 10);
-            
-            Gizmos.color = Color.blue;
-            Gizmos.DrawLine(center, center + zDir * 10);
-            
-            
         }
 
         public void ConvertToSize(Vector3 size)

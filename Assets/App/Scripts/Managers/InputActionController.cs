@@ -1,4 +1,6 @@
 using System;
+using App.Models;
+using App.OsmBuildingGenerator;
 using App.OsmBuildingGenerator.Containers;
 using App.Scripts.CommonModels;
 using UnityEngine;
@@ -46,9 +48,9 @@ namespace App.Scripts.Managers
         {
             _time += deltaTime;
             if (IsInputOverUI()) return;
-            if (Input.GetMouseButtonDown(0))
+            var ray = _camera.ScreenPointToRay(Input.mousePosition);
+            if (Input.GetMouseButtonDown(0) && AppData.InputMode == InputMode.Selection)
             {
-                var ray = _camera.ScreenPointToRay(Input.mousePosition);
                 _time = 0;
                 if (Physics.Raycast(ray, out var hit, int.MaxValue, _buildingLayerMask))
                 {
@@ -77,10 +79,23 @@ namespace App.Scripts.Managers
                     BuildingDeselected?.Invoke();
                 }
             }
+
+            if (Input.GetMouseButtonDown(0) && AppData.InputMode == InputMode.Edit)
+            {
+                if (Physics.Raycast(ray, out var hit, int.MaxValue, _buildingLayerMask))
+                {
+                    if (hit.collider.TryGetComponent<BuildingHook>(out var buildingHook))
+                    {
+                        if (buildingHook.TryGetSurfaceVertices(hit.point, out var surfaceIndexes, out var worldCenterPoint))
+                        {
+                            buildingHook.ExtendInDirection(surfaceIndexes, hit.normal * 2);
+                        }
+                    }
+                }
+            }
             
             if (Input.GetMouseButtonDown(1))
             {
-                var ray = _camera.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out var hit, int.MaxValue, _buildingLayerMask))
                 {
                     if (hit.collider.TryGetComponent<BuildingHook>(out var buildingHook))
@@ -112,27 +127,29 @@ namespace App.Scripts.Managers
                 _time = 0;
                 _moveOffset = Vector3.zero;
             }
-            
-            var buildingOnMove = false;
-            if (_time > .2f && _clickedOnBuilding && _selectedBuildingHook)
+
+            if (AppData.InputMode == InputMode.Placement)
             {
-                var ray = _camera.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out var hit, int.MaxValue, _terrainLayerMask))
+                var buildingOnMove = false;
+                if (_time > .2f && _clickedOnBuilding && _selectedBuildingHook && AppData.InputMode == InputMode.Placement)
                 {
-                    _selectedBuildingHook.transform.position = hit.point + _moveOffset;
-                    buildingOnMove = true;
+                    if (Physics.Raycast(ray, out var hit, int.MaxValue, _terrainLayerMask))
+                    {
+                        _selectedBuildingHook.transform.position = hit.point + _moveOffset;
+                        buildingOnMove = true;
+                    }
                 }
-            }
             
-            if (buildingOnMove)
-            {
-                if (Input.GetKey(KeyCode.E))
+                if (buildingOnMove)
                 {
-                    _selectedBuildingHook.transform.Rotate(Vector3.up, 10 * deltaTime);
-                }
-                else if (Input.GetKey(KeyCode.Q))
-                {
-                    _selectedBuildingHook.transform.Rotate(Vector3.up, -10 * deltaTime);
+                    if (Input.GetKey(KeyCode.E))
+                    {
+                        _selectedBuildingHook.transform.Rotate(Vector3.up, 10 * deltaTime);
+                    }
+                    else if (Input.GetKey(KeyCode.Q))
+                    {
+                        _selectedBuildingHook.transform.Rotate(Vector3.up, -10 * deltaTime);
+                    }
                 }
             }
         }

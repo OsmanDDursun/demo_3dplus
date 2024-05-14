@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using App.Models;
 using App.OsmBuildingGenerator.Utils;
 using HighlightPlus;
 
@@ -26,6 +27,7 @@ namespace App.OsmBuildingGenerator
         public const float NodataValue = 0;
         public static bool IsCapturing = true;
         public static HighlightProfile HighlightProfile { get; set; }
+        public static InputMode InputMode = InputMode.Edit;
 
         public static string GetSaveFolder()
         {

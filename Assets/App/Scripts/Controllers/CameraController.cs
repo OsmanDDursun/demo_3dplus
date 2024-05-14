@@ -1,4 +1,6 @@
 using System;
+using App.Models;
+using App.OsmBuildingGenerator;
 using Cinemachine;
 using UnityEngine;
 
@@ -6,6 +8,11 @@ namespace App.Scripts.Controllers
 {
     public class CameraController : MonoBehaviour
     {
+        private static readonly Vector2 XMinMax = new Vector2(-755, 3380);
+        private static readonly Vector2 YMinMax = new Vector2(1000, 2000);
+        private static readonly Vector2 ZMinMax = new Vector2(0, 4050);
+        
+        
         [SerializeField] private Transform _target;
         [SerializeField] private float _speed = 1f;
         [SerializeField] private float _rotationSpeed = 10f;
@@ -52,8 +59,6 @@ namespace App.Scripts.Controllers
             
             if (scroll == 0) return;
             
-            //calculate with mouse position
-            
             var ray = _camera.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out var hit, int.MaxValue, _terrainLayerMask))
             {
@@ -88,19 +93,22 @@ namespace App.Scripts.Controllers
             
             var rotation = _target.rotation;
             
+            var currentEuler = rotation.eulerAngles;
+            
             var xRotationChange = Quaternion.AngleAxis(x, Vector3.up);
             var yRotationChange = Quaternion.AngleAxis(-y, transform.right);
-            //no change in z rotation
             
             _nextTargetRotation = _target.rotation;
-            _nextTargetRotation = Quaternion.Euler(_nextTargetRotation.eulerAngles.x, _nextTargetRotation.eulerAngles.y, 0);
             _nextTargetRotation = _nextTargetRotation * xRotationChange * yRotationChange;
+            _nextTargetRotation.eulerAngles = new Vector3(_nextTargetRotation.eulerAngles.x, _nextTargetRotation.eulerAngles.y, 0);
             
             _rightInputStartPoint = currentPoint;
         }
 
         private void HandleMovement()
         {
+            if (AppData.InputMode == InputMode.Edit) return;
+            
             if (Input.GetMouseButtonDown(0))
             {
                 if (IsPointerOverBuilding()) return;
@@ -134,59 +142,12 @@ namespace App.Scripts.Controllers
 
         private void LateUpdate()
         {
+            _nextTargetPosition.x = Mathf.Clamp(_nextTargetPosition.x, XMinMax.x, XMinMax.y);
+            _nextTargetPosition.y = Mathf.Clamp(_nextTargetPosition.y, YMinMax.x, YMinMax.y);
+            _nextTargetPosition.z = Mathf.Clamp(_nextTargetPosition.z, ZMinMax.x, ZMinMax.y);
+            
             _target.position = Vector3.Lerp(_target.position, _nextTargetPosition, Time.deltaTime * 5f);
             _target.rotation = Quaternion.Lerp(_target.rotation, _nextTargetRotation, Time.deltaTime * 20f);
         }
-
-        // private void Update()
-        // {
-        //     _rightMouseButtonDown = Input.GetMouseButton(1);
-        //     
-        //     if (!_rightMouseButtonDown) return;
-        //     
-        //     var x = Input.GetAxis("Mouse X");
-        //     var y = Input.GetAxis("Mouse Y");
-        //
-        //     var rotation = _target.rotation;
-        //     
-        //     var xRotationChange = Quaternion.AngleAxis(x * _rotationSpeed, Vector3.up);
-        //     var yRotationChange = Quaternion.AngleAxis(-y * _rotationSpeed, transform.right);
-        //     
-        //     _target.rotation = rotation * xRotationChange * yRotationChange;
-        //     _target.localEulerAngles = new Vector3(_target.localEulerAngles.x, _target.localEulerAngles.y, 0);
-        //
-        //     var positionChange = Vector3.zero;
-        //     var speed = _speed;
-        //     if (Input.GetKey(KeyCode.LeftShift))
-        //     {
-        //         speed *= 2;
-        //     }
-        //     if (Input.GetKey(KeyCode.W))
-        //     {
-        //         positionChange += _target.forward * Time.deltaTime * speed;
-        //     }
-        //     if (Input.GetKey(KeyCode.S))
-        //     {
-        //         positionChange -= _target.forward * Time.deltaTime * speed;
-        //     } 
-        //     if (Input.GetKey(KeyCode.A))
-        //     {
-        //         positionChange -= _target.right * Time.deltaTime * speed;
-        //     }
-        //     if (Input.GetKey(KeyCode.D))
-        //     {
-        //         positionChange += _target.right * Time.deltaTime * speed;
-        //     }
-        //     if(Input.GetKey(KeyCode.Q))
-        //     {
-        //         positionChange -= Vector3.up * Time.deltaTime * speed;
-        //     }
-        //     if(Input.GetKey(KeyCode.E))
-        //     {
-        //         positionChange += Vector3.up * Time.deltaTime * speed;
-        //     }
-        //     
-        //     _target.position += positionChange;
-        // }
     }
 }
