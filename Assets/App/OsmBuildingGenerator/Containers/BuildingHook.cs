@@ -56,14 +56,13 @@ namespace App.OsmBuildingGenerator.Containers
         
         public void ToggleHighlight(bool toggle)
         {
-            _highlightEffect.highlighted = true;
             _highlightEffect.overlay = toggle ? 1 : 0;
         }
         
         public void ToggleOutline(bool toggle)
         {
-            _highlightEffect.highlighted = true;
             _highlightEffect.outline = toggle ? 1 : 0;
+            _highlightEffect.highlighted = true;
         }
 
         private void SetLayer()
