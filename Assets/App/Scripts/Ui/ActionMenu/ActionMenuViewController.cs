@@ -1,8 +1,9 @@
 using App.Scripts.CommonModels;
+using App.Scripts.Controllers.InputActionControllers;
 using App.Scripts.Managers;
 using UnityEngine;
 
-namespace App.Scripts.Ui
+namespace App.Scripts.Ui.ActionMenu
 {
     public class ActionMenuViewController : MonoBehaviour
     {
@@ -38,15 +39,15 @@ namespace App.Scripts.Ui
 
         private void RegisterEvents()
         {
-            AppManager.Instance.InputActionController.RightClickOnBuilding += OnRightClickOnBuilding;
-            AppManager.Instance.InputActionController.RightClickOnTerrain += OnRightClickOnTerrain;
+            InputActionController.RightClickOnBuilding += OnRightClickOnBuilding;
+            InputActionController.RightClickOnTerrain += OnRightClickOnTerrain;
         }
 
         private void UnregisterEvents()
         {
             if (AppManager.Instance == null) return;
-            AppManager.Instance.InputActionController.RightClickOnBuilding -= OnRightClickOnBuilding;
-            AppManager.Instance.InputActionController.RightClickOnTerrain -= OnRightClickOnTerrain;
+            InputActionController.RightClickOnBuilding -= OnRightClickOnBuilding;
+            InputActionController.RightClickOnTerrain -= OnRightClickOnTerrain;
         }
 
         #endregion

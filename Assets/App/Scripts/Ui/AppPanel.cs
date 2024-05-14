@@ -1,4 +1,8 @@
-using System;
+using App.Scripts.Managers;
+using App.Scripts.Ui.ActionMenu;
+using App.Scripts.Ui.BuildingInfoPanel;
+using App.Scripts.Ui.Components;
+using App.Scripts.Ui.ModeSelectionPanel;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,11 +10,11 @@ namespace App.Scripts.Ui
 {
     public class AppPanel : MonoBehaviour
     {
-        [SerializeField] private InspectorPanel _inspectorPanel;
+        [SerializeField] private BuildingInfoPanelView _inspectorPanel;
         [SerializeField] private CoordinateView _pointerCoordinateView;
         [SerializeField] private SearchView _searchView;
         [SerializeField] private ActionMenuViewController _actionMenuViewController;
-        [SerializeField] private ActionMenuView _actionMenuView;
+        [SerializeField] private ModeSelectionView _modeSelectionView;
 
         private LayerMask _terrainLayerMask;
         private Camera _camera;
@@ -27,6 +31,7 @@ namespace App.Scripts.Ui
             _inspectorPanel.Initialize();
             _searchView.Initialize();
             _actionMenuViewController.Initialize();
+            _modeSelectionView.Initialize();
             
         }
 
@@ -35,6 +40,7 @@ namespace App.Scripts.Ui
             _inspectorPanel.Dispose();
             _searchView.Dispose();
             _actionMenuViewController.Dispose();
+            _modeSelectionView.Dispose();
         }
 
         #endregion
@@ -46,6 +52,11 @@ namespace App.Scripts.Ui
             {
                 _pointerCoordinateView.UpdateView(hit.point);
             }
+        }
+        
+        public void OnQuitButtonClicked()
+        {
+            AppManager.Instance.QuitApplication();
         }
     }
 }

@@ -3,6 +3,7 @@
 
 using System;
 using App.OsmBuildingGenerator.Utils;
+using App.Scripts.Data;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif

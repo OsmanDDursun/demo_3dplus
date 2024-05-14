@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace HighlightPlus {
+namespace HighlightPlus.Runtime.Scripts {
 
     public delegate bool OnObjectSelectionEvent(GameObject obj);
 

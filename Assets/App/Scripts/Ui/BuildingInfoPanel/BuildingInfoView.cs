@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace App.Scripts.Ui.InspectorPanelView
+namespace App.Scripts.Ui.BuildingInfoPanel
 {
     public class BuildingInfoView : MonoBehaviour
     {
@@ -29,9 +29,9 @@ namespace App.Scripts.Ui.InspectorPanelView
 
         #endregion
 
-        private void Clear()
+        public void Clear()
         {
-            _metaTagViewPool.ReleaseAll();
+            _metaTagViewPool?.ReleaseAll();
         }
         
         private void CreateMetaTagViews(RealWorldTerrainOSMMetaTag[] metaTags)

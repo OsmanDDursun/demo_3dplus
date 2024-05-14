@@ -1,7 +1,14 @@
+using System;
+
 namespace App.Scripts.Configs
 {
     public static class AppConfig
     {
-        public const string OsmMapDataPath = "map";
+        private const string DataPath = "/NetCadDemo/";
+        public static string GetSaveDataFolder()
+        {
+            var documentPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments).Replace("\\", "/");
+            return documentPath + DataPath;
+        }
     }
 }

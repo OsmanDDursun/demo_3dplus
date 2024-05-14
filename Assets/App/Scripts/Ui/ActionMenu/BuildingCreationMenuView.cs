@@ -1,12 +1,11 @@
-using System;
 using App.Scripts.Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace App.Scripts.Ui
+namespace App.Scripts.Ui.ActionMenu
 {
-    public class AddBuildingMenuView : MonoBehaviour
+    public class BuildingCreationMenuView : MonoBehaviour
     {
         [SerializeField] private RectTransform _content;
         [SerializeField] private TMP_InputField _xInputField;
@@ -29,20 +28,10 @@ namespace App.Scripts.Ui
             _content.gameObject.SetActive(false);
         }
 
-        private void OnEnable()
-        {
-            RegisterEvents();
-        }
-        
-        private void OnDisable()
-        {
-            UnregisterEvents();
-        }
+        private void OnEnable() => RegisterEvents();
+        private void OnDisable() => UnregisterEvents();
 
-        private bool IsPointerOverContent()
-        {
-            return RectTransformUtility.RectangleContainsScreenPoint(_content, Input.mousePosition);
-        }
+        private bool IsPointerOverContent() => RectTransformUtility.RectangleContainsScreenPoint(_content, Input.mousePosition);
 
         private void Update()
         {
@@ -60,7 +49,7 @@ namespace App.Scripts.Ui
             
             var size = new Vector3(x, y, z);
             
-            AppManager.Instance.MapManager.AddBuilding(size, _placementPosition);
+            AppManager.Instance.MapManager.CreateBuildingAt(size, _placementPosition);
             Close();
         }
 

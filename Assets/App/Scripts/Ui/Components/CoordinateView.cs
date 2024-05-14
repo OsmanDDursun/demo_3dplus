@@ -1,9 +1,8 @@
-using App.OsmBuildingGenerator.Utils;
 using App.Scripts.Managers;
 using TMPro;
 using UnityEngine;
 
-namespace App.Scripts.Ui
+namespace App.Scripts.Ui.Components
 {
     public class CoordinateView : MonoBehaviour
     {

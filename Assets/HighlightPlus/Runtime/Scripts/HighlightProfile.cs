@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace HighlightPlus {
+namespace HighlightPlus.Runtime.Scripts {
 
     [CreateAssetMenu(menuName = "Highlight Plus Profile", fileName = "Highlight Plus Profile", order = 100)]
     [HelpURL("https://www.dropbox.com/s/1p9h8xys68lm4a3/Documentation.pdf?dl=0")]

@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
+using HighlightPlus.Pipelines.URP;
+using HighlightPlus.Runtime.Scripts;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using QualityLevel = HighlightPlus.Runtime.Scripts.QualityLevel;
 
 namespace HighlightPlus {
 

@@ -1,9 +1,10 @@
-using System;
 using System.Collections.Generic;
 using App.OsmBuildingGenerator.OSM;
 using App.OsmBuildingGenerator.Utils;
 using App.Scripts.CommonModels;
-using HighlightPlus;
+using App.Scripts.Data;
+using App.Scripts.Managers;
+using HighlightPlus.Runtime.Scripts;
 using UnityEngine;
 
 namespace App.OsmBuildingGenerator.Containers
@@ -21,8 +22,7 @@ namespace App.OsmBuildingGenerator.Containers
         private HighlightEffect _highlightEffect;
         private MeshFilter _meshFilter;
         private MeshCollider _meshCollider;
-        private List<Vector3> _surfaceVertices = new();
-        private List<Vector3> _extendedVertices = new();
+        private readonly List<Vector3> _surfaceVertices = new();
         
         #region Init&Dispose
 
@@ -37,29 +37,11 @@ namespace App.OsmBuildingGenerator.Containers
             _dynamicBuilding = GetComponent<RealWorldTerrainDynamicBuilding>();
             _meta = GetComponent<RealWorldTerrainOSMMeta>();
             _highlightEffect = gameObject.AddComponent<HighlightEffect>();
-            _highlightEffect.ProfileLoad(AppData.HighlightProfile);
-            SetLayer();
+            _highlightEffect.ProfileLoad(ResourcesManager.Instance.GetHighlightProfile());
+            gameObject.layer = LayerMask.NameToLayer("Building");
         }
         
         #endregion
-
-        public Vector3[] GetVertices()
-        {
-            return _dynamicBuilding.baseVertices;
-        }
-        
-        public Vector3 GetFaceCenter(Vector3 position)
-        {
-            var vertices = _dynamicBuilding.baseVertices;
-            var center = Vector3.zero;
-            for (var i = 0; i < vertices.Length; i++)
-            {
-                center += vertices[i];
-            }
-
-            center /= vertices.Length;
-            return center;
-        }
 
         public bool TryGetSurfaceVertices(Vector3 pointOnSurface, out List<Vector3> surfaceVertices, out Vector3 worldCenterPoint)
         {
@@ -105,37 +87,9 @@ namespace App.OsmBuildingGenerator.Containers
             return _surfaceVertices.Count > 0;
         }
         
-        public bool TryGetSurfaceData(Vector3 surfacePoint, out List<int> verticesIndexes, out Vector3 center)
-        {
-            verticesIndexes = new List<int>();
-            if (!TryGetSurfaceVertices(surfacePoint, out var vertices, out center))
-                return false;
-            
-            var verticesArray = _dynamicBuilding.baseVertices;
-
-            for (int i = 0; i < vertices.Count; i++)
-            {
-                var vertex = vertices[i];
-                
-                for (int j = 0; j < verticesArray.Length; j++)
-                {
-                    var baseVertex = verticesArray[j];
-                    var distance = Vector3.Distance(vertex, baseVertex);
-                    if (distance < 0.1f)
-                    {
-                        verticesIndexes.Add(j);
-                        break;
-                    }
-                }
-            }
-            
-            return true;
-        }
-        
         public void ExtendInDirection(List<Vector3> vertices, Vector3 direction)
         {
             var localDirection = transform.InverseTransformDirection(direction);
-            _extendedVertices.Clear();
             
             var baseVertices = _dynamicBuilding.baseVertices;
 
@@ -150,7 +104,6 @@ namespace App.OsmBuildingGenerator.Containers
                     if (distance < 0.1f)
                     {
                         baseVertices[j] += localDirection;
-                        _extendedVertices.Add(baseVertex + localDirection);
                         break;
                     }
                 }
@@ -187,11 +140,6 @@ namespace App.OsmBuildingGenerator.Containers
             _highlightEffect.outline = toggle ? 1 : 0;
             _highlightEffect.highlighted = true;
         }
-
-        private void SetLayer()
-        {
-            gameObject.layer = LayerMask.NameToLayer("Building");
-        }
         
         public RealWorldTerrainOSMMetaTag[] GetMetaTags()
         {
@@ -206,41 +154,6 @@ namespace App.OsmBuildingGenerator.Containers
             _meshCollider.sharedMesh = _meshFilter.mesh;
         }
         
-        public bool TryGetMetaTagValue(string tag, out string value)
-        {
-            value = null;
-            if (_meta == null || _meta.metaInfo == null) return false;
-
-            foreach (var metaTag in _meta.metaInfo)
-            {
-                if (metaTag.CompareKeyOrValue(tag, true, false))
-                {
-                    value = metaTag.info;
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private void OnDrawGizmos()
-        {
-            // if (_surfaceVertices == null) return;
-            // foreach (var faceVertex in _surfaceVertices)
-            // {
-            //     var worldPosition = transform.TransformPoint(faceVertex);
-            //     Gizmos.color = Color.red;
-            //     Gizmos.DrawSphere(worldPosition, 1f);
-            // }            
-            
-            foreach (var faceVertex in _extendedVertices)
-            {
-                var worldPosition = transform.TransformPoint(faceVertex);
-                Gizmos.color = Color.red;
-                Gizmos.DrawSphere(worldPosition, 1f);
-            }
-        }
-
         public void ConvertToSize(Vector3 size)
         {
             _dynamicBuilding.baseVertices = new Vector3[]
@@ -259,6 +172,17 @@ namespace App.OsmBuildingGenerator.Containers
             _dynamicBuilding.Generate(true);
             _highlightEffect.Refresh(true);
             _meshCollider.sharedMesh = _meshFilter.mesh;
+        }
+
+        private void OnDrawGizmos()
+        {
+            // if (_surfaceVertices == null) return;
+            // foreach (var faceVertex in _surfaceVertices)
+            // {
+            //     var worldPosition = transform.TransformPoint(faceVertex);
+            //     Gizmos.color = Color.red;
+            //     Gizmos.DrawSphere(worldPosition, 1f);
+            // }
         }
     }
 }

@@ -1,5 +1,7 @@
-﻿using UnityEditor;
+﻿using HighlightPlus.Runtime.Scripts;
+using UnityEditor;
 using UnityEngine;
+using QualityLevel = HighlightPlus.Runtime.Scripts.QualityLevel;
 
 namespace HighlightPlus {
 

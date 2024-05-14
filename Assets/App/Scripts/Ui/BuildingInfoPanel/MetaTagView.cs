@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace App.Scripts.Ui
+namespace App.Scripts.Ui.BuildingInfoPanel
 {
     public class MetaTagView : MonoBehaviour
     {

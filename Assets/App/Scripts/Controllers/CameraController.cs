@@ -1,7 +1,5 @@
-using System;
-using App.Models;
-using App.OsmBuildingGenerator;
-using Cinemachine;
+using App.Scripts.CommonModels;
+using App.Scripts.Data;
 using UnityEngine;
 
 namespace App.Scripts.Controllers
@@ -11,7 +9,6 @@ namespace App.Scripts.Controllers
         private static readonly Vector2 XMinMax = new Vector2(-755, 3380);
         private static readonly Vector2 YMinMax = new Vector2(1000, 2000);
         private static readonly Vector2 ZMinMax = new Vector2(0, 4050);
-        
         
         [SerializeField] private Transform _target;
         [SerializeField] private float _speed = 1f;
@@ -55,7 +52,6 @@ namespace App.Scripts.Controllers
         private void HandleScroll()
         {
             var scroll = Input.mouseScrollDelta.y;
-            Debug.Log(scroll);
             
             if (scroll == 0) return;
             
@@ -142,9 +138,9 @@ namespace App.Scripts.Controllers
 
         private void LateUpdate()
         {
-            _nextTargetPosition.x = Mathf.Clamp(_nextTargetPosition.x, XMinMax.x, XMinMax.y);
-            _nextTargetPosition.y = Mathf.Clamp(_nextTargetPosition.y, YMinMax.x, YMinMax.y);
-            _nextTargetPosition.z = Mathf.Clamp(_nextTargetPosition.z, ZMinMax.x, ZMinMax.y);
+            // _nextTargetPosition.x = Mathf.Clamp(_nextTargetPosition.x, XMinMax.x, XMinMax.y);
+            // _nextTargetPosition.y = Mathf.Clamp(_nextTargetPosition.y, YMinMax.x, YMinMax.y);
+            // _nextTargetPosition.z = Mathf.Clamp(_nextTargetPosition.z, ZMinMax.x, ZMinMax.y);
             
             _target.position = Vector3.Lerp(_target.position, _nextTargetPosition, Time.deltaTime * 5f);
             _target.rotation = Quaternion.Lerp(_target.rotation, _nextTargetRotation, Time.deltaTime * 20f);

@@ -1,4 +1,4 @@
-namespace App.Models
+namespace App.Scripts.CommonModels
 {
     public enum InputMode
     {

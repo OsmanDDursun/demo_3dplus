@@ -1,7 +1,7 @@
-﻿using UnityEngine;
-using HighlightPlus;
+﻿using HighlightPlus.Runtime.Scripts;
+using UnityEngine;
 
-namespace HighlightPlus.Demos {
+namespace HighlightPlus.Demo.Scripts {
 	
 	public class SphereHighlightEventExample : MonoBehaviour {
 

@@ -3,6 +3,7 @@ using App.OsmBuildingGenerator;
 using App.OsmBuildingGenerator.Containers;
 using App.OsmBuildingGenerator.Net;
 using App.Scripts.CommonModels;
+using App.Scripts.Data;
 using UnityEngine;
 
 namespace App.Scripts.Managers
@@ -16,6 +17,11 @@ namespace App.Scripts.Managers
 
         public void Initialize(RealWorldTerrainContainer container)
         {
+            AppData.BottomLatitude = container.bottomLatitude;
+            AppData.LeftLongitude = container.leftLongitude;
+            AppData.TopLatitude = container.topLatitude;
+            AppData.RightLongitude = container.rightLongitude;
+            
             _terrainContainer = container;
             RegisterEvents();
         }
@@ -96,6 +102,11 @@ namespace App.Scripts.Managers
             return _buildingHooksByBuildingId[buildingId];
         }
         
+        public bool TryGetBuildingHookForBuildingId(BuildingId buildingId, out BuildingHook hook)
+        {
+            return _buildingHooksByBuildingId.TryGetValue(buildingId, out hook);
+        }
+        
         public void ChangeBuildingHeight(BuildingId buildingId, float value)
         {
             if (!_buildingHooksByBuildingId.TryGetValue(buildingId, out var buildingHook)) return;
@@ -107,7 +118,7 @@ namespace App.Scripts.Managers
             return _terrainContainer.GetCoordinatesByWorldPosition(worldPosition, out longitude, out latitude, out altitude);
         }
         
-        public void AddBuilding(Vector3 size, Vector3 position)
+        public void CreateBuildingAt(Vector3 size, Vector3 position)
         {
             RealWorldTerrainBuildingGenerator.CreateHouse(size.x, size.y, size.z, position, _terrainContainer);
         }

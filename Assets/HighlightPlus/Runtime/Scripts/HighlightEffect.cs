@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace HighlightPlus {
+namespace HighlightPlus.Runtime.Scripts {
 
     public delegate bool OnObjectHighlightEvent(GameObject obj);
     public delegate bool OnObjectHighlightStateEvent(GameObject obj, bool state);

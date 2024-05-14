@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using HighlightPlus.Runtime.Scripts;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-namespace HighlightPlus {
+namespace HighlightPlus.Pipelines.URP {
 
     public class HighlightPlusRenderPassFeature : ScriptableRendererFeature {
         class HighlightPass : ScriptableRenderPass {

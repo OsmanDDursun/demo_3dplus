@@ -2,6 +2,7 @@
 /*   http://www.infinity-code.com   */
 
 using App.OsmBuildingGenerator.Containers;
+using App.Scripts.Data;
 using UnityEngine;
 
 namespace App.OsmBuildingGenerator.Utils

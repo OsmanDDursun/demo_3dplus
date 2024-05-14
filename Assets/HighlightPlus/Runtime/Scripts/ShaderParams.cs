@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace HighlightPlus {
+namespace HighlightPlus.Runtime.Scripts {
 
     public static class ShaderParams {
 

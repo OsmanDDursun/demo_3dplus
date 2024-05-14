@@ -8,6 +8,7 @@ using System.Linq;
 using System.Xml;
 using App.OsmBuildingGenerator.Containers;
 using App.OsmBuildingGenerator.OSM;
+using App.Scripts.Data;
 using UnityEngine;
 
 namespace App.OsmBuildingGenerator.Utils

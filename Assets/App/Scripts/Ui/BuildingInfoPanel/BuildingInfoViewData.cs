@@ -1,7 +1,7 @@
 using App.OsmBuildingGenerator.OSM;
 using App.Scripts.CommonModels;
 
-namespace App.Scripts.Ui
+namespace App.Scripts.Ui.BuildingInfoPanel
 {
     public readonly struct BuildingInfoViewData
     {

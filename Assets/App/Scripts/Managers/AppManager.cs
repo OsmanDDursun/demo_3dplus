@@ -1,11 +1,13 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using App.OsmBuildingGenerator;
 using App.OsmBuildingGenerator.Containers;
 using App.OsmBuildingGenerator.Utils;
+using App.Scripts.CommonModels;
+using App.Scripts.Configs;
+using App.Scripts.Controllers;
+using App.Scripts.Controllers.InputActionControllers;
+using App.Scripts.Data;
 using App.Scripts.Helpers;
-using HighlightPlus;
 using UnityEngine;
 
 namespace App.Scripts.Managers
@@ -13,16 +15,14 @@ namespace App.Scripts.Managers
     public class AppManager : SingletonBehaviour<AppManager>
     {
         public event Action Initialized;
+        public event Action<InputMode> InputModeChanged;
         
-        [SerializeField] private Material _roofMaterial;
-        [SerializeField] private Material _wallMaterial;
-        [SerializeField] private HighlightProfile _highlightProfile;
         
         [SerializeField] private RealWorldTerrainContainer _terrainContainer;
 
         public bool IsInitialized { get; private set; }
         public MapManager MapManager { get; private set; }
-        public InputActionController InputActionController { get; private set; }
+        public InputActionManager InputActionManager { get; private set; }
         
         protected override void OnAwake() => Initialize();
         private void OnDestroy() => Dispose();
@@ -33,21 +33,10 @@ namespace App.Scripts.Managers
         {
             RealWorldTerrainOSMUtils.InitOSMServer();
             
-            if (!Directory.Exists(AppData.GetSaveFolder()))
+            if (!Directory.Exists(AppConfig.GetSaveDataFolder()))
             {
-                Directory.CreateDirectory(AppData.GetSaveFolder());
+                Directory.CreateDirectory(AppConfig.GetSaveDataFolder());
             }
-            
-            AppData.HighlightProfile = _highlightProfile;
-            
-            AppData.BuildingMaterials = new List<RealWorldTerrainBuildingMaterial>()
-            {
-                new()
-                {
-                    roof = _roofMaterial,
-                    wall = _wallMaterial
-                }
-            };
             
             InitializeEssentials();
             IsInitialized = true;
@@ -61,22 +50,28 @@ namespace App.Scripts.Managers
         }
 
         #endregion Init&Dispose
+        
+        public void ChangeInputMode(InputMode inputMode)
+        {
+            AppData.InputMode = inputMode;
+            InputModeChanged?.Invoke(inputMode);
+        }
 
         private void Update()
         {
             if (!IsInitialized) return;
             
-            InputActionController.Tick(Time.deltaTime);
+            InputActionManager.Tick(Time.deltaTime);
         }
 
         private void InitializeEssentials()
         {
             MapManager = new MapManager();
-            InputActionController = new InputActionController();
+            InputActionManager = new InputActionManager(this);
             
             
             MapManager.Initialize(_terrainContainer);
-            InputActionController.Initialize();
+            InputActionManager.Initialize();
             
             MapManager.CreateBuildings();
         }
@@ -84,7 +79,12 @@ namespace App.Scripts.Managers
         private void DisposeEssentials()
         {
             MapManager.Dispose();
-            InputActionController.Dispose();
+            InputActionManager.Dispose();
+        }
+        
+        public void QuitApplication()
+        {
+            Application.Quit();
         }
     }
 }

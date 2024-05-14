@@ -58,7 +58,6 @@ namespace App.OsmBuildingGenerator.Net
         public static void CheckComplete()
         {
             foreach (RealWorldTerrainDownloadItem item in activeItems) item.CheckComplete();
-            if (!AppData.IsCapturing) return;
 
             activeItems.RemoveAll(i => i.complete);
             while (activeItems.Count < maxDownloadItem && items.Count > 0)
@@ -103,7 +102,6 @@ namespace App.OsmBuildingGenerator.Net
             }
             catch
             {
-                AppData.IsCapturing = false;
                 Dispose();
                 return;
             }

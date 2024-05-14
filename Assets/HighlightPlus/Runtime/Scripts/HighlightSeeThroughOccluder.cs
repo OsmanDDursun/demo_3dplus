@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace HighlightPlus {
+namespace HighlightPlus.Runtime.Scripts {
 
     public struct MeshData {
         public Renderer renderer;

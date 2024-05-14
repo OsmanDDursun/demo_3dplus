@@ -1,4 +1,3 @@
-using System;
 using App.Scripts.Managers;
 using TMPro;
 using UnityEngine;
@@ -40,6 +39,7 @@ namespace App.Scripts.Ui
         private void OnClearButtonPressed()
         {
             AppManager.Instance.MapManager.DisableAllHighlights();
+            _searchFieldText.text = string.Empty;
             _countText.text = "0";
         }
 

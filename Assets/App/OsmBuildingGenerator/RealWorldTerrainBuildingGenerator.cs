@@ -11,8 +11,10 @@ using App.OsmBuildingGenerator.Net;
 using App.OsmBuildingGenerator.OSM;
 using App.OsmBuildingGenerator.Utils;
 using App.Scripts.CommonModels;
+using App.Scripts.Configs;
+using App.Scripts.Data;
+using App.Scripts.Managers;
 using UnityEngine;
-using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 namespace App.OsmBuildingGenerator
@@ -46,7 +48,7 @@ namespace App.OsmBuildingGenerator
         {
             get
             {
-                return Path.Combine(AppData.GetSaveFolder(), string.Format("buildings_{0}_{1}_{2}_{3}.osm", AppData.BottomLatitude, AppData.LeftLongitude, AppData.TopLatitude, AppData.RightLongitude));
+                return Path.Combine(AppConfig.GetSaveDataFolder(), string.Format("buildings_{0}_{1}_{2}_{3}.osm", AppData.BottomLatitude, AppData.LeftLongitude, AppData.TopLatitude, AppData.RightLongitude));
             }
         }
 
@@ -259,25 +261,6 @@ namespace App.OsmBuildingGenerator
                 }
                 else baseHeight = AppData.BuildingFloorLimits.Random() * AppData.BuildingFloorHeight;
             }
-
-            if (AppData.BuildingUseColorTags)
-            {
-                string colorStr = way.GetTagValue("building:colour");
-                if (useDefaultMaterials && !string.IsNullOrEmpty(colorStr))
-                {
-                    Color color = RealWorldTerrainUtils.StringToColor(colorStr);
-                    if (color != wallMaterial.color)
-                    {
-                        if (!saveMaterials)
-                        {
-                            saveMaterials = true;
-                            wallMaterial = Object.Instantiate(wallMaterial);
-                            roofMaterial = Object.Instantiate(roofMaterial);
-                        }
-                        wallMaterial.color = roofMaterial.color = color;
-                    }
-                }
-            }
         }
 
         private static void CreateHouse(RealWorldTerrainOSMWay way, RealWorldTerrainContainer globalContainer, int index)
@@ -363,8 +346,9 @@ namespace App.OsmBuildingGenerator
             bool useDefaultMaterials = true;
 
             useDefaultMaterials = false;
-            int rnd = Random.Range(0, AppData.BuildingMaterials.Count);
-            buildingMaterial = AppData.BuildingMaterials[rnd];
+            var buildingMaterials = ResourcesManager.Instance.GetBuildingMaterials();
+            int rnd = Random.Range(0, buildingMaterials.Count);
+            buildingMaterial = buildingMaterials[rnd];
 
             wallMaterial = buildingMaterial.wall;
             roofMaterial = buildingMaterial.roof;
@@ -378,7 +362,7 @@ namespace App.OsmBuildingGenerator
             GameObject houseGO = RealWorldTerrainUtils.CreateGameObject(houseContainer, "House " + way.id);
             houseGO.transform.position = centerPoint;
 
-            RealWorldTerrainBuilding house = AppData.DynamicBuildings ? houseGO.AddComponent<RealWorldTerrainDynamicBuilding>() : houseGO.AddComponent<RealWorldTerrainBuilding>();
+            RealWorldTerrainBuilding house = houseGO.AddComponent<RealWorldTerrainDynamicBuilding>();
             house.baseHeight = baseHeight;
             house.baseVertices = baseVertices;
             house.startHeight = -AppData.BuildingBasementDepth;
@@ -418,14 +402,15 @@ namespace App.OsmBuildingGenerator
             
             GameObject houseGO = RealWorldTerrainUtils.CreateGameObject(houseContainer, "House ");
             houseGO.transform.position = position;
-            
-            int rnd = Random.Range(0, AppData.BuildingMaterials.Count);
-            var buildingMaterial = AppData.BuildingMaterials[rnd];
+
+            var buildingMaterials = ResourcesManager.Instance.GetBuildingMaterials();
+            int rnd = Random.Range(0, buildingMaterials.Count);
+            var buildingMaterial = buildingMaterials[rnd];
 
             var wallMaterial = buildingMaterial.wall;
             var roofMaterial = buildingMaterial.roof;
 
-            RealWorldTerrainBuilding house = AppData.DynamicBuildings ? houseGO.AddComponent<RealWorldTerrainDynamicBuilding>() : houseGO.AddComponent<RealWorldTerrainBuilding>();
+            RealWorldTerrainBuilding house = houseGO.AddComponent<RealWorldTerrainDynamicBuilding>();
             house.baseHeight = ySize;
             house.baseVertices = baseVertices;
             house.startHeight = -AppData.BuildingBasementDepth;
@@ -462,7 +447,6 @@ namespace App.OsmBuildingGenerator
 
         public static void Download(Action onComplete = null)
         {
-            if (!AppData.GenerateBuildings) return;
             DownloadSingleRequest(onComplete);
         }
 

@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
-
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using EnhancedTouch = UnityEngine.InputSystem.EnhancedTouch;
 #endif
 
-namespace HighlightPlus {
+namespace HighlightPlus.Runtime.Scripts {
 
     public static class InputProxy {
 

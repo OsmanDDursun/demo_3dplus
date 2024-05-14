@@ -1,23 +1,26 @@
+using System;
 using System.Globalization;
 using App.Scripts.CommonModels;
+using App.Scripts.Controllers.InputActionControllers;
 using App.Scripts.Managers;
-using App.Scripts.Ui.InspectorPanelView;
 using TMPro;
 using UnityEngine;
 
-namespace App.Scripts.Ui
+namespace App.Scripts.Ui.BuildingInfoPanel
 {
-    public class InspectorPanel : MonoBehaviour
+    public class BuildingInfoPanelView : MonoBehaviour
     {
         [SerializeField] private BuildingInfoView _buildingInfoView;
         [SerializeField] private TMP_InputField _buildingHeightInputField;
 
         private BuildingId _selectedBuildingId;
+        private bool _inputFieldSelected = false;
         
         #region Init&Dispose
 
         public void Initialize()
         {
+            _inputFieldSelected = false;
             RegisterEvents();
         }
 
@@ -46,9 +49,18 @@ namespace App.Scripts.Ui
             _buildingHeightInputField.onValueChanged.AddListener(OnBuildingHeightInputFieldChanged);
             ShowBuildingInfo(infoData);
         }
-        
+
+        private void Update()
+        {
+            if (!_selectedBuildingId.IsValid) return;
+            if (_inputFieldSelected) return;
+            if (AppManager.Instance.MapManager.TryGetBuildingHookForBuildingId(_selectedBuildingId, out var hook))
+                _buildingHeightInputField.text = hook.GetHeight().ToString(CultureInfo.InvariantCulture);
+        }
+
         private void OnBuildingDeselected()
         {
+            _buildingInfoView.Clear();
             _buildingHeightInputField.onValueChanged.RemoveAllListeners();
             _selectedBuildingId = BuildingId.Invalid;
         }
@@ -61,20 +73,31 @@ namespace App.Scripts.Ui
             
             AppManager.Instance.MapManager.ChangeBuildingHeight(_selectedBuildingId, height);
         }
+        
+        private void OnBuildingHeightInputFieldSelected(string arg0)
+        {
+            _inputFieldSelected = true;
+        }
+        
+        private void OnBuildingHeightInputFieldDeselected(string arg0)
+        {
+            _inputFieldSelected = false;
+        }
 
         private void RegisterEvents()
         {
-            AppManager.Instance.InputActionController.BuildingSelected += OnBuildingSelected;
-            AppManager.Instance.InputActionController.BuildingDeselected += OnBuildingDeselected;
+            InputActionController.BuildingSelected += OnBuildingSelected;
+            InputActionController.BuildingDeselected += OnBuildingDeselected;
+            _buildingHeightInputField.onSelect.AddListener(OnBuildingHeightInputFieldSelected);
+            _buildingHeightInputField.onDeselect.AddListener(OnBuildingHeightInputFieldDeselected);
         }
 
         private void UnregisterEvents()
         {
-            if (AppManager.Instance)
-            {
-                AppManager.Instance.InputActionController.BuildingSelected -= OnBuildingSelected;
-                AppManager.Instance.InputActionController.BuildingDeselected -= OnBuildingDeselected;
-            }
+            InputActionController.BuildingSelected -= OnBuildingSelected;
+            InputActionController.BuildingDeselected -= OnBuildingDeselected;
+            _buildingHeightInputField.onSelect.RemoveAllListeners();
+            _buildingHeightInputField.onDeselect.RemoveAllListeners();
         }
 
         #endregion

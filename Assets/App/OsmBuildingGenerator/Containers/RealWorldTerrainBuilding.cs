@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using App.OsmBuildingGenerator.Utils;
+using App.Scripts.Data;
 using UnityEngine;
 
 namespace App.OsmBuildingGenerator.Containers

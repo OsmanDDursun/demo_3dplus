@@ -1,11 +1,10 @@
-using System;
 using System.Collections.Generic;
 using App.Scripts.CommonModels;
 using App.Scripts.Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace App.Scripts.Ui
+namespace App.Scripts.Ui.ActionMenu
 {
     public class ActionMenuView : MonoBehaviour
     {
@@ -15,7 +14,7 @@ namespace App.Scripts.Ui
         [SerializeField] private Button _addBuildingActionButton;
         [SerializeField] private Button _convertBuildingActionButton;
         [SerializeField] private Button _deleteBuildingActionButton;
-        [SerializeField] private AddBuildingMenuView _addBuildingView;
+        [SerializeField] private BuildingCreationMenuView _addBuildingView;
 
         private BuildingId _selectedBuildingId;
         private LayerMask _terrainLayerMask;
@@ -39,8 +38,17 @@ namespace App.Scripts.Ui
 
         #endregion Init&Dispose
         
+        private void Update()
+        {
+            if (Input.GetMouseButtonDown(0) && !IsPointerOverContent())
+            {
+                Close();
+            }
+        }
+        
         public void OpenWithBuilding(BuildingId buildingId)
         {
+            _selectedBuildingId = buildingId;
             _terrainActions.ForEach(action => action.SetActive(false));
             _buildingActions.ForEach(action => action.SetActive(true));
             Open();
@@ -66,23 +74,8 @@ namespace App.Scripts.Ui
             _content.position = _menuPivot;
         }
 
-        private void Close()
-        {
-            _content.gameObject.SetActive(false);
-        }
-        
-        private bool IsPointerOverContent()
-        {
-            return RectTransformUtility.RectangleContainsScreenPoint(_content, Input.mousePosition);
-        }
-
-        private void Update()
-        {
-            if (Input.GetMouseButtonDown(0) && !IsPointerOverContent())
-            {
-                Close();
-            }
-        }
+        private void Close() => _content.gameObject.SetActive(false);
+        private bool IsPointerOverContent() => RectTransformUtility.RectangleContainsScreenPoint(_content, Input.mousePosition);
         
         private void OnDeleteBuildingButtonPressed()
         {
@@ -105,16 +98,6 @@ namespace App.Scripts.Ui
             _addBuildingView.Open(_terrainHitPoint, _menuPivot);
             Close();
         }
-        
-        private void OnBuildingSelected(BuildingId buildingId)
-        {
-            _selectedBuildingId = buildingId;
-        }
-        
-        private void OnBuildingDeselected()
-        {
-            _selectedBuildingId = BuildingId.Invalid;
-        }
 
         #region Events
 
@@ -123,8 +106,6 @@ namespace App.Scripts.Ui
             _addBuildingActionButton.onClick.AddListener(OnAddBuildingButtonPressed);
             _convertBuildingActionButton.onClick.AddListener(OnConvertBuildingButtonPressed);
             _deleteBuildingActionButton.onClick.AddListener(OnDeleteBuildingButtonPressed);
-            AppManager.Instance.InputActionController.BuildingSelected += OnBuildingSelected;
-            AppManager.Instance.InputActionController.BuildingDeselected += OnBuildingDeselected;
         }
 
         private void UnregisterEvents()
@@ -132,11 +113,6 @@ namespace App.Scripts.Ui
             _addBuildingActionButton.onClick.RemoveAllListeners();
             _convertBuildingActionButton.onClick.RemoveAllListeners();
             _deleteBuildingActionButton.onClick.RemoveAllListeners();
-            if (AppManager.Instance)
-            {
-                AppManager.Instance.InputActionController.BuildingSelected -= OnBuildingSelected;
-                AppManager.Instance.InputActionController.BuildingDeselected -= OnBuildingDeselected;
-            }
         }
 
         #endregion Events
