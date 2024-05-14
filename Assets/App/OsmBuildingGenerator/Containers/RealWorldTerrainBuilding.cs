@@ -356,10 +356,13 @@ namespace App.OsmBuildingGenerator.Containers
             return angle1 < angle2;
         }
 
-        public void Generate()
+        public void Generate(bool resetMesh = false)
         {
             Mesh mesh;
-            if (meshFilter.sharedMesh != null) mesh = meshFilter.sharedMesh;
+            if (meshFilter.sharedMesh != null && !resetMesh)
+            {
+                mesh = meshFilter.sharedMesh;
+            }
             else
             {
                 mesh = new Mesh();

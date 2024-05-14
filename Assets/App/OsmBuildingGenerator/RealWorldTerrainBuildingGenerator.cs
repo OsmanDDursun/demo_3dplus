@@ -401,8 +401,50 @@ namespace App.OsmBuildingGenerator
             houseGO.AddComponent<RealWorldTerrainOSMMeta>().GetFromOSM(way);
 
             var hook = houseGO.AddComponent<BuildingHook>();
-            var buildingId = BuildingId.Parse(way.id);
-            hook.Initialize(index, buildingId);
+            var buildingId = BuildingId.Generate();
+            var indexId = BuildingIndexId.Next();
+            hook.Initialize(indexId, buildingId);
+            BuildingCreated?.Invoke(buildingId, hook);
+        }
+
+        public static void CreateHouse(float xSize, float ySize, float zSize, Vector3 position, RealWorldTerrainContainer globalContainer)
+        {
+            Vector3[] baseVertices = new Vector3[4];
+
+            baseVertices[0] = new Vector3(-xSize / 2, 0, -zSize / 2);
+            baseVertices[1] = new Vector3(-xSize / 2, 0, zSize / 2);
+            baseVertices[2] = new Vector3(xSize / 2, 0, zSize / 2);
+            baseVertices[3] = new Vector3(xSize / 2, 0, -zSize / 2);
+            
+            GameObject houseGO = RealWorldTerrainUtils.CreateGameObject(houseContainer, "House ");
+            houseGO.transform.position = position;
+            
+            int rnd = Random.Range(0, AppData.BuildingMaterials.Count);
+            var buildingMaterial = AppData.BuildingMaterials[rnd];
+
+            var wallMaterial = buildingMaterial.wall;
+            var roofMaterial = buildingMaterial.roof;
+
+            RealWorldTerrainBuilding house = AppData.DynamicBuildings ? houseGO.AddComponent<RealWorldTerrainDynamicBuilding>() : houseGO.AddComponent<RealWorldTerrainBuilding>();
+            house.baseHeight = ySize;
+            house.baseVertices = baseVertices;
+            house.startHeight = -AppData.BuildingBasementDepth;
+            house.container = globalContainer;
+            house.roofHeight = 0;
+            house.roofType = RealWorldTerrainRoofType.flat;
+            house.generateWall = true;
+            house.wallMaterial = wallMaterial;
+            house.roofMaterial = roofMaterial;
+            house.tileSize = buildingMaterial.tileSize;
+            house.id = string.Empty;
+
+            house.Generate();
+            houseGO.AddComponent<RealWorldTerrainOSMMeta>();
+
+            var hook = houseGO.AddComponent<BuildingHook>();
+            var buildingId = BuildingId.Generate();
+            var indexId = BuildingIndexId.Next();
+            hook.Initialize(indexId, buildingId);
             BuildingCreated?.Invoke(buildingId, hook);
         }
 

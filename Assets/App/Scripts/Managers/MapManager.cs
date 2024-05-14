@@ -56,8 +56,9 @@ namespace App.Scripts.Managers
             var count = 0;
             foreach (var (buildingId, hook) in _buildingHooksByBuildingId)
             {
-                
-                foreach (var metaTag in hook.GetMetaTags())
+                var metaTags = hook.GetMetaTags();
+                if (metaTags == null) continue;
+                foreach (var metaTag in metaTags)
                 {
                     var lowerInfo = info.ToLower();
                     var lowerMetaInfo = metaTag.info.ToLower();
@@ -95,31 +96,6 @@ namespace App.Scripts.Managers
             return _buildingHooksByBuildingId[buildingId];
         }
         
-        public bool GetBuildingHookForIndex(int index, out BuildingHook buildingHook)
-        {
-            foreach (var (buildingId, hook) in _buildingHooksByBuildingId)
-            {
-                if (hook.Index != index) continue;
-                
-                buildingHook = hook;
-                return true;
-            }
-
-            buildingHook = null;
-            return false;
-        }
-        
-        public IEnumerable<BuildingHook> GetBuildingHooksInIndexRange(int min, int max)
-        {
-            foreach (var (buildingId, hook) in _buildingHooksByBuildingId)
-            {
-                if (hook.Index >= min && hook.Index <= max)
-                {
-                    yield return hook;
-                }
-            }
-        }
-        
         public void ChangeBuildingHeight(BuildingId buildingId, float value)
         {
             if (!_buildingHooksByBuildingId.TryGetValue(buildingId, out var buildingHook)) return;
@@ -129,6 +105,24 @@ namespace App.Scripts.Managers
         public bool GetCoordinatesByWorldPosition(Vector3 worldPosition, out double longitude, out double latitude, out double altitude)
         {
             return _terrainContainer.GetCoordinatesByWorldPosition(worldPosition, out longitude, out latitude, out altitude);
+        }
+        
+        public void AddBuilding(Vector3 size, Vector3 position)
+        {
+            RealWorldTerrainBuildingGenerator.CreateHouse(size.x, size.y, size.z, position, _terrainContainer);
+        }
+        
+        public void RemoveBuilding(BuildingId buildingId)
+        {
+            if (!_buildingHooksByBuildingId.TryGetValue(buildingId, out var buildingHook)) return;
+            Object.Destroy(buildingHook.gameObject);
+            _buildingHooksByBuildingId.Remove(buildingId);
+        }
+        
+        public void ConvertBuildingToSize(BuildingId buildingId, Vector3 size)
+        {
+            if (!_buildingHooksByBuildingId.TryGetValue(buildingId, out var buildingHook)) return;
+            buildingHook.ConvertToSize(size);
         }
 
         #region Events

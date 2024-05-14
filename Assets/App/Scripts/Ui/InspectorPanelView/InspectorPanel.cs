@@ -64,16 +64,16 @@ namespace App.Scripts.Ui
 
         private void RegisterEvents()
         {
-            AppManager.Instance.BuildingInputManager.BuildingSelected += OnBuildingSelected;
-            AppManager.Instance.BuildingInputManager.BuildingDeselected += OnBuildingDeselected;
+            AppManager.Instance.InputActionController.BuildingSelected += OnBuildingSelected;
+            AppManager.Instance.InputActionController.BuildingDeselected += OnBuildingDeselected;
         }
 
         private void UnregisterEvents()
         {
             if (AppManager.Instance)
             {
-                AppManager.Instance.BuildingInputManager.BuildingSelected -= OnBuildingSelected;
-                AppManager.Instance.BuildingInputManager.BuildingDeselected -= OnBuildingDeselected;
+                AppManager.Instance.InputActionController.BuildingSelected -= OnBuildingSelected;
+                AppManager.Instance.InputActionController.BuildingDeselected -= OnBuildingDeselected;
             }
         }
 

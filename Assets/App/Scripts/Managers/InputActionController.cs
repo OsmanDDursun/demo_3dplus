@@ -6,10 +6,12 @@ using UnityEngine.EventSystems;
 
 namespace App.Scripts.Managers
 {
-    public class BuildingInputManager
+    public class InputActionController
     {
         public event Action<BuildingId> BuildingSelected;
         public event Action BuildingDeselected;
+        public event Action<BuildingId> RightClickOnBuilding;
+        public event Action RightClickOnTerrain;
 
         private Camera _camera;
         private LayerMask _buildingLayerMask;
@@ -46,8 +48,8 @@ namespace App.Scripts.Managers
             if (IsInputOverUI()) return;
             if (Input.GetMouseButtonDown(0))
             {
-                _time = 0;
                 var ray = _camera.ScreenPointToRay(Input.mousePosition);
+                _time = 0;
                 if (Physics.Raycast(ray, out var hit, int.MaxValue, _buildingLayerMask))
                 {
                     if (hit.collider.TryGetComponent<BuildingHook>(out var buildingHook))
@@ -73,6 +75,34 @@ namespace App.Scripts.Managers
                     if (_selectedBuildingHook)
                         _selectedBuildingHook.ToggleOutline(false);
                     BuildingDeselected?.Invoke();
+                }
+            }
+            
+            if (Input.GetMouseButtonDown(1))
+            {
+                var ray = _camera.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out var hit, int.MaxValue, _buildingLayerMask))
+                {
+                    if (hit.collider.TryGetComponent<BuildingHook>(out var buildingHook))
+                    {
+                        if (_selectedBuildingHook && _selectedBuildingHook != buildingHook)
+                        {
+                            _selectedBuildingHook.ToggleOutline(false);
+                            BuildingDeselected?.Invoke();
+                        }
+                        
+                        buildingHook.ToggleOutline(true);
+                        _selectedBuildingHook = buildingHook;
+                        BuildingSelected?.Invoke(buildingHook.BuildingId);
+                        RightClickOnBuilding?.Invoke(buildingHook.BuildingId);
+                    }
+                }
+                else
+                {
+                    if (_selectedBuildingHook)
+                        _selectedBuildingHook.ToggleOutline(false);
+                    BuildingDeselected?.Invoke();
+                    RightClickOnTerrain?.Invoke();
                 }
             }
             

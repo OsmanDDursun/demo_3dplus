@@ -22,7 +22,7 @@ namespace App.Scripts.Ui.InspectorPanelView
         {
             _metaTagViewPool ??= new ComponentPool<MetaTagView>(_metaTagViewPrefab, 5, _metaTagViewContainer);
             _buildingIdText.text = data.BuildingId.Value.ToString();
-            _buildingIndexText.text = data.BuildingIndex.ToString();
+            _buildingIndexText.text = data.BuildingIndex.Value.ToString();
             Clear();
             CreateMetaTagViews(data.MetaTags);
         }
@@ -36,6 +36,8 @@ namespace App.Scripts.Ui.InspectorPanelView
         
         private void CreateMetaTagViews(RealWorldTerrainOSMMetaTag[] metaTags)
         {
+            if (metaTags == null) return;
+            
             foreach (var metaTag in metaTags)
             {
                 var metaTagView = _metaTagViewPool.Get();

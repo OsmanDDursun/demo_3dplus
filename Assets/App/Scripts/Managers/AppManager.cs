@@ -22,7 +22,7 @@ namespace App.Scripts.Managers
 
         public bool IsInitialized { get; private set; }
         public MapManager MapManager { get; private set; }
-        public BuildingInputManager BuildingInputManager { get; private set; }
+        public InputActionController InputActionController { get; private set; }
         
         protected override void OnAwake() => Initialize();
         private void OnDestroy() => Dispose();
@@ -66,17 +66,17 @@ namespace App.Scripts.Managers
         {
             if (!IsInitialized) return;
             
-            BuildingInputManager.Tick(Time.deltaTime);
+            InputActionController.Tick(Time.deltaTime);
         }
 
         private void InitializeEssentials()
         {
             MapManager = new MapManager();
-            BuildingInputManager = new BuildingInputManager();
+            InputActionController = new InputActionController();
             
             
             MapManager.Initialize(_terrainContainer);
-            BuildingInputManager.Initialize();
+            InputActionController.Initialize();
             
             MapManager.CreateBuildings();
         }
@@ -84,7 +84,7 @@ namespace App.Scripts.Managers
         private void DisposeEssentials()
         {
             MapManager.Dispose();
-            BuildingInputManager.Dispose();
+            InputActionController.Dispose();
         }
     }
 }

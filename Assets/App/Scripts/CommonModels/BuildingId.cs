@@ -8,6 +8,8 @@ namespace App.Scripts.CommonModels
         public ulong Value { get; }
         public bool IsValid => Value != 0;
         
+        private static List<ulong> _ids = new List<ulong>();
+        
         public BuildingId(ulong value)
         {
             Value = value;
@@ -15,13 +17,15 @@ namespace App.Scripts.CommonModels
         
         public static BuildingId Invalid = new BuildingId(0);
         
-        public static BuildingId Parse(string value)
+        public static BuildingId Generate()
         {
-            if (ulong.TryParse(value, out ulong result))
+            ulong id = 0;
+            while (id == 0 || _ids.Contains(id))
             {
-                return new BuildingId(result);
+                id = (ulong)UnityEngine.Random.Range(1, int.MaxValue);
             }
-            return Invalid;
+            _ids.Add(id);
+            return new BuildingId(id);
         }
         
         public static bool operator ==(BuildingId a, BuildingId b) => a.Value == b.Value;

@@ -9,6 +9,8 @@ namespace App.Scripts.Ui
         [SerializeField] private InspectorPanel _inspectorPanel;
         [SerializeField] private CoordinateView _pointerCoordinateView;
         [SerializeField] private SearchView _searchView;
+        [SerializeField] private ActionMenuViewController _actionMenuViewController;
+        [SerializeField] private ActionMenuView _actionMenuView;
 
         private LayerMask _terrainLayerMask;
         private Camera _camera;
@@ -24,12 +26,15 @@ namespace App.Scripts.Ui
             _terrainLayerMask = LayerMask.GetMask("Terrain");
             _inspectorPanel.Initialize();
             _searchView.Initialize();
+            _actionMenuViewController.Initialize();
+            
         }
 
         private void Dispose()
         {
             _inspectorPanel.Dispose();
             _searchView.Dispose();
+            _actionMenuViewController.Dispose();
         }
 
         #endregion

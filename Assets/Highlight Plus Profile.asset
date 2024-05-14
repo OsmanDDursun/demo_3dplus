@@ -19,7 +19,7 @@ MonoBehaviour:
   effectNameFilter: 
   combineMeshes: 0
   alphaCutOff: 0
-  cullBackFaces: 0
+  cullBackFaces: 1
   normalsOption: 0
   fadeInDuration: 0
   fadeOutDuration: 0
@@ -28,7 +28,7 @@ MonoBehaviour:
   cameraDistanceFadeFar: 1000
   constantWidth: 1
   overlay: 0
-  overlayMode: 0
+  overlayMode: 10
   overlayColor: {r: 1, g: 0.8392157, b: 0.015686275, a: 1}
   overlayAnimationSpeed: 1
   overlayMinIntensity: 0.5
@@ -38,7 +38,7 @@ MonoBehaviour:
   overlayTextureScale: 1
   overlayTextureScrolling: {x: 0, y: 0}
   overlayVisibility: 1
-  outline: 0.076
+  outline: 0
   outlineColor: {r: 1, g: 0.405365, b: 0, a: 1}
   outlineColorStyle: 0
   outlineGradient:
@@ -114,7 +114,7 @@ MonoBehaviour:
   innerGlow: 0
   innerGlowWidth: 1
   innerGlowBlendMode: 0
-  innerGlowColor: {r: 1, g: 1, b: 1, a: 1}
+  innerGlowColor: {r: 0.972549, g: 0.16078432, b: 0.16078432, a: 1}
   innerGlowVisibility: 0
   targetFX: 0
   targetFXTexture: {fileID: 0}
