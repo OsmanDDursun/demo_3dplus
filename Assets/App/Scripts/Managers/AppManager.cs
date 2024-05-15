@@ -72,8 +72,6 @@ namespace App.Scripts.Managers
             
             MapManager.Initialize(_terrainContainer);
             InputActionManager.Initialize();
-            
-            MapManager.CreateBuildings();
         }
         
         private void DisposeEssentials()

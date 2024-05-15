@@ -5,6 +5,7 @@ using App.OsmBuildingGenerator.Net;
 using App.Scripts.CommonModels;
 using App.Scripts.Data;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace App.Scripts.Managers
 {
@@ -13,6 +14,7 @@ namespace App.Scripts.Managers
         private readonly Dictionary<BuildingId, BuildingHook> _buildingHooksByBuildingId = new();
         private RealWorldTerrainContainer _terrainContainer;
         private List<BuildingId> _highlightedBuildingIds = new List<BuildingId>();
+        
         #region Init&Dispose
 
         public void Initialize(RealWorldTerrainContainer container)
@@ -33,7 +35,7 @@ namespace App.Scripts.Managers
         }
 
         #endregion Init&Dispose
-
+        
         public void CreateBuildings()
         {
             RealWorldTerrainBuildingGenerator.Download((() =>
@@ -149,5 +151,25 @@ namespace App.Scripts.Managers
         }
 
         #endregion
+
+        public float GetProgress()
+        {
+            return (float)RealWorldTerrainDownloadManager.progress;
+        }
+
+        public bool TryGetBuildingHookForBuildingIndexId(BuildingIndexId buildingIndexId, out BuildingHook buildingHook)
+        {
+            foreach (var hook in _buildingHooksByBuildingId.Values)
+            {
+                if (hook.Index == buildingIndexId)
+                {
+                    buildingHook = hook;
+                    return true;
+                }
+            }
+            
+            buildingHook = null;
+            return false;
+        }
     }
 }

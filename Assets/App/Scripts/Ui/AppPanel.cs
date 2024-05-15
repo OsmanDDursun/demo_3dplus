@@ -15,6 +15,8 @@ namespace App.Scripts.Ui
         [SerializeField] private SearchView _searchView;
         [SerializeField] private ActionMenuViewController _actionMenuViewController;
         [SerializeField] private ModeSelectionView _modeSelectionView;
+        [SerializeField] private Button _generateButton;
+        [SerializeField] private GoBuildingSearchView _goBuildingSearchView;
 
         private LayerMask _terrainLayerMask;
         private Camera _camera;
@@ -32,7 +34,7 @@ namespace App.Scripts.Ui
             _searchView.Initialize();
             _actionMenuViewController.Initialize();
             _modeSelectionView.Initialize();
-            
+            _goBuildingSearchView.Initialize();
         }
 
         private void Dispose()
@@ -41,6 +43,7 @@ namespace App.Scripts.Ui
             _searchView.Dispose();
             _actionMenuViewController.Dispose();
             _modeSelectionView.Dispose();
+            _goBuildingSearchView.Dispose();
         }
 
         #endregion
@@ -52,6 +55,12 @@ namespace App.Scripts.Ui
             {
                 _pointerCoordinateView.UpdateView(hit.point);
             }
+        }
+        
+        public void OnGenerateButtonClicked()
+        {
+            _generateButton.interactable = false;
+            AppManager.Instance.MapManager.CreateBuildings();
         }
         
         public void OnQuitButtonClicked()

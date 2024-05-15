@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using App.OsmBuildingGenerator.OSM;
 using App.OsmBuildingGenerator.Utils;
 using App.Scripts.CommonModels;
+using App.Scripts.Configs;
 using App.Scripts.Data;
 using App.Scripts.Managers;
 using HighlightPlus.Runtime.Scripts;
@@ -39,9 +40,17 @@ namespace App.OsmBuildingGenerator.Containers
             _highlightEffect = gameObject.AddComponent<HighlightEffect>();
             _highlightEffect.ProfileLoad(ResourcesManager.Instance.GetHighlightProfile());
             gameObject.layer = LayerMask.NameToLayer("Building");
+            
+            UpdateBuildingColor();
         }
         
         #endregion
+        
+        private void UpdateBuildingColor()
+        {
+            var color = AppConfig.GetBuildingColorForHeight(_dynamicBuilding.baseHeight);
+            ChangeColor(color);
+        }
 
         public bool TryGetSurfaceVertices(Vector3 pointOnSurface, out List<Vector3> surfaceVertices, out Vector3 worldCenterPoint)
         {
@@ -113,6 +122,7 @@ namespace App.OsmBuildingGenerator.Containers
             _dynamicBuilding.Generate();
             _highlightEffect.Refresh(true);
             _meshCollider.sharedMesh = _meshFilter.mesh;
+            UpdateBuildingColor();
         }
         
         public float GetHeight()
@@ -152,6 +162,7 @@ namespace App.OsmBuildingGenerator.Containers
             _dynamicBuilding.Generate();
             _highlightEffect.Refresh(true);
             _meshCollider.sharedMesh = _meshFilter.mesh;
+            UpdateBuildingColor();
         }
         
         public void ConvertToSize(Vector3 size)
@@ -172,6 +183,7 @@ namespace App.OsmBuildingGenerator.Containers
             _dynamicBuilding.Generate(true);
             _highlightEffect.Refresh(true);
             _meshCollider.sharedMesh = _meshFilter.mesh;
+            UpdateBuildingColor();
         }
 
         private void OnDrawGizmos()

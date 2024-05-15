@@ -10,17 +10,47 @@ namespace App.Scripts.Ui.ModeSelectionPanel
         public event Action<InputMode> Pressed;
         
         [SerializeField] private InputMode _inputMode;
-        [SerializeField] private Button _button;
+        [SerializeField] private UiButtonBase _button;
         [SerializeField] private Image _SelectionFrame;
+        [SerializeField] private GameObject _tooltip;
 
         public InputMode InputMode => _inputMode;
+        private float _toolTipTimer = 0;
+        private bool _isPointerHovered = false;
         
         #region Init&Dispose
 
         public void Initialize()
         {
             _button.onClick.AddListener(OnButtonClicked);
+            _button.OnPointerEnterEvent.AddListener(OnPointerHover);
             OnDeselect();
+        }
+
+        private void OnPointerHover(bool isEnter)
+        {
+            _isPointerHovered = isEnter;
+        }
+        
+        private void ToggleTooltip(bool show)
+        {
+            _tooltip.SetActive(show);
+        }
+
+        private void Update()
+        {
+            if (!_isPointerHovered)
+            {
+                ToggleTooltip(false);
+                _toolTipTimer = 0;
+                return;
+            }
+            
+            _toolTipTimer += Time.deltaTime;
+            if (_toolTipTimer >= .5f)
+            {
+                ToggleTooltip(true);
+            }
         }
 
         public void Dispose()

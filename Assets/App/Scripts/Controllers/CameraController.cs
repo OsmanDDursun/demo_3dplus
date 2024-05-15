@@ -1,10 +1,11 @@
 using App.Scripts.CommonModels;
 using App.Scripts.Data;
+using App.Scripts.Helpers;
 using UnityEngine;
 
 namespace App.Scripts.Controllers
 {
-    public class CameraController : MonoBehaviour
+    public class CameraController : SingletonBehaviour<CameraController>
     {
         private static readonly Vector2 XMinMax = new Vector2(-755, 3380);
         private static readonly Vector2 YMinMax = new Vector2(1000, 2000);
@@ -22,14 +23,14 @@ namespace App.Scripts.Controllers
         private Vector3 _rightInputStartPoint;
         private Vector3 _nextTargetPosition;
         private Quaternion _nextTargetRotation;
-        private Plane _intersectPlane;
+        private Quaternion _initialRotation;
 
         private bool _leftMouseButtonDown;
         private bool _rightMouseButtonDown;
 
-        private void Awake()
+        protected override void OnAwake()
         {
-            _intersectPlane = new Plane(Vector3.up, Vector3.zero);
+            _initialRotation = _target.rotation;
             _nextTargetPosition = _target.position;
             _nextTargetRotation = _target.rotation;
             _camera = Camera.main;
@@ -37,6 +38,22 @@ namespace App.Scripts.Controllers
             _terrainLayerMask = LayerMask.GetMask("Terrain");
         }
         
+        public void FocusTo(Vector3 position, float height)
+        {
+            position += Vector3.up * height / 2;
+            var dir = (position - _target.position).normalized;
+            var dir2D = new Vector3(dir.x, 0, dir.z);
+            
+            height = Mathf.Clamp(height, 50, 400);
+            var cameraPosition = position + dir2D * (height * -3) + Vector3.up * (height * 2);
+            
+            var cameraDir = (position - cameraPosition).normalized;
+            var cameraRotation = Quaternion.LookRotation(cameraDir);
+
+            _nextTargetPosition = cameraPosition;
+            _nextTargetRotation = cameraRotation;
+        }
+
         private bool IsPointerOverBuilding()
         {
             return Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out _, int.MaxValue, _buildingLayerMask);

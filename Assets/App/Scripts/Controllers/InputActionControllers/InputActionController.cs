@@ -1,7 +1,6 @@
 using System;
 using App.OsmBuildingGenerator.Containers;
 using App.Scripts.CommonModels;
-using App.Scripts.Data;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -67,7 +66,6 @@ namespace App.Scripts.Controllers.InputActionControllers
                             SelectedBuildingHook.ToggleOutline(false);
                             OnBuildingDeselected();
                         }
-                        
                         buildingHook.ToggleOutline(true);
                         SelectedBuildingHook = buildingHook;
                         OnBuildingSelected(buildingHook.BuildingId);
