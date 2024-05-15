@@ -59,7 +59,7 @@ namespace App.Scripts.Managers
             _highlightedBuildingIds.Add(buildingId);
         }
         
-        public int HighlightBuildingsForInfo(string info)
+        public int HighlightBuildingsForInfo(string info, ref List<BuildingHook> buildings)
         {
             var count = 0;
             foreach (var (buildingId, hook) in _buildingHooksByBuildingId)
@@ -73,6 +73,7 @@ namespace App.Scripts.Managers
                     if (lowerMetaInfo.Contains(lowerInfo))
                     {
                         count++;
+                        buildings.Add(hook);
                         HighlightBuilding(buildingId);
                     }
                 }

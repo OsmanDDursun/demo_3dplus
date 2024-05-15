@@ -388,7 +388,10 @@ namespace App.OsmBuildingGenerator.Containers
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
 
-            GetComponent<MeshRenderer>().materials = new[]
+            roofMaterial = new Material(roofMaterial);
+            wallMaterial = new Material(wallMaterial);
+            var meshRenderer = GetComponent<MeshRenderer>();
+            meshRenderer.sharedMaterials = new[]
             {
                 roofMaterial,
                 wallMaterial,

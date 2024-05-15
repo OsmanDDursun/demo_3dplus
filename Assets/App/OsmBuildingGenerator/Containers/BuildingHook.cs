@@ -19,11 +19,13 @@ namespace App.OsmBuildingGenerator.Containers
         private RealWorldTerrainOSMMeta _meta;
         private MeshRenderer _meshRenderer;
         private MaterialPropertyBlock _propertyBlock;
-        private Material _outlineMaterial;
         private HighlightEffect _highlightEffect;
         private MeshFilter _meshFilter;
         private MeshCollider _meshCollider;
         private readonly List<Vector3> _surfaceVertices = new();
+
+        private Color _assignedColor;
+        
         
         #region Init&Dispose
 
@@ -50,6 +52,7 @@ namespace App.OsmBuildingGenerator.Containers
         {
             var color = AppConfig.GetBuildingColorForHeight(_dynamicBuilding.baseHeight);
             ChangeColor(color);
+            _assignedColor = color;
         }
 
         public bool TryGetSurfaceVertices(Vector3 pointOnSurface, out List<Vector3> surfaceVertices, out Vector3 worldCenterPoint)
@@ -132,16 +135,22 @@ namespace App.OsmBuildingGenerator.Containers
         
         public void ChangeColor(Color color)
         {
-            for (var i = 0; i < _meshRenderer.materials.Length; i++)
-            {
-                _meshRenderer.GetPropertyBlock(_propertyBlock, i);
-                _propertyBlock.SetColor("_BaseColor", color);
-                _meshRenderer.SetPropertyBlock(_propertyBlock, i);
-            }
+            color.a = .9f;
+            _dynamicBuilding.roofMaterial.color = color;
+            _dynamicBuilding.wallMaterial.color = color;
         }
         
         public void ToggleHighlight(bool toggle)
         {
+            if (toggle)
+            {
+                ChangeColor(Color.white);
+            }
+            else
+            {
+                ChangeColor(_assignedColor);
+            }
+            
             _highlightEffect.overlay = toggle ? 1 : 0;
         }
         
